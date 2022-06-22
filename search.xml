@@ -155,7 +155,9 @@
 
 <h2 id="ShapeNet"><a href="#ShapeNet" class="headerlink" title="ShapeNet"></a>ShapeNet</h2><p><a href="https://shapenet.org/">shapenet.org</a><br>申請帳號並通過管理員認證後，下載<code>ShapeNetCore.v1</code><br>將其解壓縮(類別也要解壓縮)至自訂位置<code>$(SHAPENET_DATA)</code></p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ ./make_new_chair.sh $(SHAPENET_DATA)</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ <span class="built_in">ln</span> -s $(SHAPENET_DATA)/02958343 ./car</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ <span class="built_in">ln</span> -s $(SHAPENET_DATA)/new_chair ./chair</span></span><br></pre></td></tr></table></figure>
-<h2 id="相關套件"><a href="#相關套件" class="headerlink" title="相關套件"></a>相關套件</h2><p>:::info<br>盡量去各官網下載，以免用<code>apt-get</code>裝到不完全、別的東西<br>:::</p>
+<h2 id="相關套件"><a href="#相關套件" class="headerlink" title="相關套件"></a>相關套件</h2><blockquote>
+<p>盡量去各官網下載，以免用<code>apt-get</code>裝到不完全、別的東西</p>
+</blockquote>
 <h3 id="1-GL"><a href="#1-GL" class="headerlink" title="1. GL"></a>1. GL</h3><p>我是在之前裝CUDA的時候順便裝好的<br>可參考<a href="https://hackmd.io/s/rk_WrHvRe">Caffe Install Note</a></p>
 <h3 id="2-GLEW"><a href="#2-GLEW" class="headerlink" title="2. GLEW"></a>2. GLEW</h3><p><a href="http://glew.sourceforge.net/">GLEW</a> &#x2F; vesion 2.1.0<br>下載後解壓縮，再依照README install</p>
 <p>由於他是安裝在<code>~/usr/lib64</code>，故要做連結</p>
