@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Kotlin Coroutine Context and Dispatchers一直沒有很懂 Coroutine 在幹麻，每每想到、爬文、看了老半天還是懵懂懵懂這次終於有開竅的感覺，趁記憶還在趕緊記錄下來也因此這篇文會引用大量文章 (感謝這些大神)，並濃縮其精華、加入個人主觀理解的總結">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kotlin Coroutine Context and Dispatchers">
+<meta property="og:url" content="http://example.com/2022/06/21/220621_kotlin-coroutine-context-and-dispatchers/index.html">
+<meta property="og:site_name" content="Jack&#39;s 學習筆記">
+<meta property="og:description" content="Kotlin Coroutine Context and Dispatchers一直沒有很懂 Coroutine 在幹麻，每每想到、爬文、看了老半天還是懵懂懵懂這次終於有開竅的感覺，趁記憶還在趕緊記錄下來也因此這篇文會引用大量文章 (感謝這些大神)，並濃縮其精華、加入個人主觀理解的總結">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/uYNmIaT.png">
+<meta property="og:image" content="https://i.imgur.com/sF03AL5.png">
+<meta property="og:image" content="https://i.imgur.com/iWzo4gY.jpg">
+<meta property="og:image" content="https://i.imgur.com/MikaG53.png">
+<meta property="og:image" content="https://i.imgur.com/hc7ooRP.png">
+<meta property="og:image" content="https://i.imgur.com/4jLeG3N.png">
+<meta property="og:image" content="https://i.imgur.com/aZFIYv9.png">
+<meta property="article:published_time" content="2022-06-20T19:55:00.000Z">
+<meta property="article:modified_time" content="2022-06-22T17:10:25.248Z">
+<meta property="article:author" content="Jack Lo">
+<meta property="article:tag" content="學習">
+<meta property="article:tag" content="Kotlin">
+<meta property="article:tag" content="Coroutine">
+<meta property="article:tag" content="Dispatcher">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/uYNmIaT.png">
+
+
+<link rel="canonical" href="http://example.com/2022/06/21/220621_kotlin-coroutine-context-and-dispatchers/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/21/220621_kotlin-coroutine-context-and-dispatchers/","path":"2022/06/21/220621_kotlin-coroutine-context-and-dispatchers/","title":"Kotlin Coroutine Context and Dispatchers"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Kotlin Coroutine Context and Dispatchers | Jack's 學習筆記</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Jack's 學習筆記</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沒寫真的會忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">18</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">10</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">6</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kotlin-Coroutine-Context-and-Dispatchers"><span class="nav-number">1.</span> <span class="nav-text">Kotlin Coroutine Context and Dispatchers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E8%AC%9B-Dispatchers-%E4%B9%8B%E5%89%8D%EF%BC%8C%E4%BB%80%E9%BA%BC%E6%98%AF-Coroutine"><span class="nav-number">2.</span> <span class="nav-text">在講 Dispatchers 之前，什麼是 Coroutine ?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E4%BE%86%E5%80%8B%E7%B5%90%E8%AB%96"><span class="nav-number">2.0.1.</span> <span class="nav-text">先來個結論</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%E6%98%AF%E9%80%99%E6%A8%A3"><span class="nav-number">2.0.2.</span> <span class="nav-text">原因是這樣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E5%80%91%E4%BE%86%E7%B8%BD%E7%B5%90%E4%B8%80%E4%B8%8B"><span class="nav-number">2.0.3.</span> <span class="nav-text">我們來總結一下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80%EF%BC%9AProcess-vs-Thread"><span class="nav-number">2.0.4.</span> <span class="nav-text">延伸閱讀：Process vs. Thread</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%99%E7%AF%87%E6%96%87%E7%9A%84%E9%87%8D%E9%BB%9E%E5%85%B6%E5%AF%A6%E6%98%AF-Dispatchers"><span class="nav-number">3.</span> <span class="nav-text">這篇文的重點其實是 Dispatchers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B5%90%E8%AB%96%E5%85%88%E4%BE%86"><span class="nav-number">3.0.1.</span> <span class="nav-text">結論先來</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0-%E2%80%A6"><span class="nav-number">3.0.2.</span> <span class="nav-text">原因 …</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%84%E6%98%AF%E8%A3%9C%E5%85%85%E4%B8%80%E4%B8%8B"><span class="nav-number">3.0.3.</span> <span class="nav-text">還是補充一下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%8D%E8%A3%9C%E5%85%85%E4%B8%80%E4%BA%9B"><span class="nav-number">3.0.4.</span> <span class="nav-text">再補充一些</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E5%80%8B-launch"><span class="nav-number">3.0.4.1.</span> <span class="nav-text">第一個 launch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%80%8B-launch-%E6%8C%87%E5%AE%9A%E4%BA%86-Dispatchers-Unconfined"><span class="nav-number">3.0.4.2.</span> <span class="nav-text">第二個 launch 指定了 Dispatchers.Unconfined</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E5%80%8B-launch-%E6%8C%87%E5%AE%9A%E4%BA%86-Dispatchers-Default"><span class="nav-number">3.0.4.3.</span> <span class="nav-text">第三個 launch 指定了 Dispatchers.Default</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E5%80%8B-launch-%E6%8C%87%E5%AE%9A%E4%BA%86%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84-Thread"><span class="nav-number">3.0.4.4.</span> <span class="nav-text">第四個 launch 指定了自定義的 Thread</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jack Lo"
+      src="/images/photo.jpg">
+  <p class="site-author-name" itemprop="name">Jack Lo</p>
+  <div class="site-description" itemprop="description">(Coffee) -> (Magic) -> Code</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mdes4214" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mdes4214" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mdes4214@gmail.com" title="E-Mail → mailto:mdes4214@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/21/220621_kotlin-coroutine-context-and-dispatchers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo.jpg">
+      <meta itemprop="name" content="Jack Lo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jack's 學習筆記">
+      <meta itemprop="description" content="(Coffee) -> (Magic) -> Code">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Kotlin Coroutine Context and Dispatchers | Jack's 學習筆記">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kotlin Coroutine Context and Dispatchers
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-06-21 03:55:00" itemprop="dateCreated datePublished" datetime="2022-06-21T03:55:00+08:00">2022-06-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-23 01:10:25" itemprop="dateModified" datetime="2022-06-23T01:10:25+08:00">2022-06-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kotlin/" itemprop="url" rel="index"><span itemprop="name">Kotlin</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kotlin/Coroutine/" itemprop="url" rel="index"><span itemprop="name">Coroutine</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Kotlin-Coroutine-Context-and-Dispatchers"><a href="#Kotlin-Coroutine-Context-and-Dispatchers" class="headerlink" title="Kotlin Coroutine Context and Dispatchers"></a>Kotlin Coroutine Context and Dispatchers</h1><p>一直沒有很懂 Coroutine 在幹麻，每每想到、爬文、看了老半天還是懵懂懵懂<br>這次終於有開竅的感覺，趁記憶還在趕緊記錄下來<br>也因此這篇文會引用大量文章 (感謝這些大神)，並濃縮其精華、加入個人主觀理解的總結</p>
+<span id="more"></span>
+
+<h1 id="在講-Dispatchers-之前，什麼是-Coroutine"><a href="#在講-Dispatchers-之前，什麼是-Coroutine" class="headerlink" title="在講 Dispatchers 之前，什麼是 Coroutine ?"></a>在講 Dispatchers 之前，什麼是 Coroutine ?</h1><blockquote>
+<p>References:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://kotlinlang.org/docs/coroutines-basics.html">Coroutines basics</a></li>
+<li><a target="_blank" rel="noopener" href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutine context and dispatchers</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a></li>
+<li><a target="_blank" rel="noopener" href="https://totoroliu.medium.com/program-process-thread-%E5%B7%AE%E7%95%B0-4a360c7345e5">Program&#x2F;Process&#x2F;Thread 差異</a></li>
+</ul>
+</blockquote>
+<h3 id="先來個結論"><a href="#先來個結論" class="headerlink" title="先來個結論"></a>先來個結論</h3><p>Coroutine 是一個 AP Level、輕量化的 Thread<br>而 Dispatch 到另一個 Coroutine Context 的行為，就類似於 Thread 的 Context Switch</p>
+<h3 id="原因是這樣"><a href="#原因是這樣" class="headerlink" title="原因是這樣"></a>原因是這樣</h3><p>Coroutine 在官網中的描述是這樣的</p>
+<blockquote>
+<p>Coroutines can be thought of as light-weight threads, but there is a number of important differences that make their real-life usage very different from threads.</p>
+</blockquote>
+<p>前半段點出了重點：<code>Coroutine 可以當成是輕量化的 Thread</code><br>當然，後半段有說實際上還是很多不一樣的<br>但這句其實就是 Coroutine 的懶人包</p>
+<p>而我自己會再加上一段註解：<code>Coroutine 是一個 AP Level、輕量化的 Thread</code><br>原因在於，本篇文章要講的 Dispatchers<br>其實就是 Coroutine 在程式實作了 Thread 上的 <code>Context Switch</code></p>
+<p>配合 <a target="_blank" rel="noopener" href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a> 提到的</p>
+<blockquote>
+<ul>
+<li>協同式多工：程式會定時放棄已佔有的執行資源讓其它程式可以執行。由程式自己讓出執行資源，作業系統不會干涉。</li>
+<li>搶佔式多工：程式有各自的優先權，作業系統會根據程式的優先權安排當下哪個程式能擁有執行資源去執行，另外作業系統有權中斷任何正在執行中的程式，變更執行資源的擁有者。</li>
+</ul>
+</blockquote>
+<p>Coroutine 屬於前者，Thread 屬於後者<br>而 <code>協同式多工</code> 描述中的 <code>讓出執行資源</code>，其實就是 <code>Dispatch</code></p>
+<blockquote>
+<p>你看，該有的關鍵字都到齊了：Dispatch, Context</p>
+</blockquote>
+<p>再來細部一點，一樣是 <a target="_blank" rel="noopener" href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a> 提到的圖<br>這是 Thread<br><img src="https://i.imgur.com/uYNmIaT.png"><br>這是 Coroutine<br><img src="https://i.imgur.com/sF03AL5.png"></p>
+<p><del>四捨五入之後基本一樣</del> 可以發現兩者在很多地方是很相似的<br>我的 Kotlin 程式中某段邏輯，可以選擇要執行在哪個 Coroutine (Context)<br>而 Context 之間的切換，就是在程式中利用 <code>Dispatchers</code> 去做 Dispatch<br>拿官網的例子來看</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">launch &#123; <span class="comment">// context of the parent, main runBlocking coroutine</span></span><br><span class="line">    println(<span class="string">&quot;main runBlocking      : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Unconfined) &#123; <span class="comment">// not confined -- will work with main thread</span></span><br><span class="line">    println(<span class="string">&quot;Unconfined            : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Default) &#123; <span class="comment">// will get dispatched to DefaultDispatcher </span></span><br><span class="line">    println(<span class="string">&quot;Default               : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(newSingleThreadContext(<span class="string">&quot;MyOwnThread&quot;</span>)) &#123; <span class="comment">// will get its own new thread</span></span><br><span class="line">    println(<span class="string">&quot;newSingleThreadContext: I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這四個 <code>println()</code> 分別跑在這幾個 Coroutine Context 上 (順序不定)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main runBlocking      : I&#x27;m working in thread main</span><br><span class="line">Unconfined            : I&#x27;m working in thread main</span><br><span class="line">Default               : I&#x27;m working in thread DefaultDispatcher-worker-1</span><br><span class="line">newSingleThreadContext: I&#x27;m working in thread MyOwnThread</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是，如上面 Coroutine 的架構圖所示<br>Coroutine 終究只是 “AP Level”，實際執行還是要跟 OS 要資源的 (跑在 Thread 上)</p>
+<h3 id="我們來總結一下"><a href="#我們來總結一下" class="headerlink" title="我們來總結一下"></a>我們來總結一下</h3><p>從資源面來看<br>OS 會從 CPU 分出可用的 Thread 給我的程式 (其實是 Process) 運行</p>
+<p>Coroutine 是在此之上多了一層 AP Level 的切分<br>也就是</p>
+<ul>
+<li>不同的 Coroutine 可以用同一個 Thread 來執行 (Thread 可以當作 Coroutine 的容器)</li>
+<li>程式中的不同段程式碼可以跑在不同 Coroutine 上</li>
+</ul>
+<p>如同官網說的</p>
+<blockquote>
+<p>A coroutine is an instance of suspendable computation. It is conceptually similar to a thread, in the sense that it takes a block of code to run that works concurrently with the rest of the code. However, a coroutine is not bound to any particular thread. It may suspend its execution in one thread and resume in another one.</p>
+</blockquote>
+<p>而這樣做的目的如同 <a target="_blank" rel="noopener" href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a> 所說</p>
+<blockquote>
+<p>Coroutine 之間的切換由當前正在執行的 Coroutine 主動讓出執行權給其它 Coroutine 執行，藉此達到並行運作，因為 Coroutine 的切換是在上層，不需要由底層的作業系統來處理，所以 Coroutine 交替時所產生的上下文切換負擔比 Thread 小。</p>
+</blockquote>
+<p>也呼應了一開始提到的官方說法：<code>Coroutine 可以當成是輕量化的 Thread</code></p>
+<h3 id="延伸閱讀：Process-vs-Thread"><a href="#延伸閱讀：Process-vs-Thread" class="headerlink" title="延伸閱讀：Process vs. Thread"></a>延伸閱讀：Process vs. Thread</h3><p>主要是在看 Coroutine 的文章時，熊熊忘記 Process vs. Thread 這種基本也經典的比較<br>這篇 <a target="_blank" rel="noopener" href="https://totoroliu.medium.com/program-process-thread-%E5%B7%AE%E7%95%B0-4a360c7345e5">Program&#x2F;Process&#x2F;Thread 差異</a> 講的很清楚<br>引用文中的圖<br><img src="https://i.imgur.com/iWzo4gY.jpg"></p>
+<p>這邊就直接下結論了</p>
+<ul>
+<li>我的程式就是 Program，在執行的時候會是以 Process 存在 (也才會有 PID)</li>
+<li>而 Process 執行可以由多個 Thread 來完成</li>
+<li>這些 Thread 會共享這個 Process 的資源 (CPU, Memory, …)</li>
+</ul>
+<p>配合 Coroutine 來說就是</p>
+<ul>
+<li>Process 是 Thread 的容器</li>
+<li>Thread 又是 Coroutine 的容器</li>
+<li>而他們就是實際執行 Program 的那些環境</li>
+</ul>
+<h1 id="這篇文的重點其實是-Dispatchers"><a href="#這篇文的重點其實是-Dispatchers" class="headerlink" title="這篇文的重點其實是 Dispatchers"></a>這篇文的重點其實是 Dispatchers</h1><blockquote>
+<p>References:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/index.html">Dispatchers</a></li>
+<li><a target="_blank" rel="noopener" href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutine context and dispatchers</a></li>
+<li><a target="_blank" rel="noopener" href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-start/index.html">CoroutineStart</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a></li>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10270487">day8 kotlin coroutine的 runBlocking, withContext</a></li>
+</ul>
+</blockquote>
+<p>雖然說是重點，但篇幅好像會比 Coroutine 短很多<br>主要是因為細節都在這篇 <a target="_blank" rel="noopener" href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a> 中 (精彩的 trace code)</p>
+<h3 id="結論先來"><a href="#結論先來" class="headerlink" title="結論先來"></a>結論先來</h3><p>Dispatchers 有五種，扣掉自定義的有四種</p>
+<ul>
+<li><code>Dispatchers.Main</code> 沒什麼好說的，就是跑在 Main Thread 上 (看 runtime 環境而定)</li>
+<li><code>Dispatchers.Default</code> 這裡的 Default 是指 Koltin 預先定義好的基本 Thread</li>
+<li><code>Dispatchers.IO</code> 算是 Default 的變形，透過算法可以拿到超過 CPU Thread 數量的資源 (Worker)</li>
+<li><code>Dispatchers.Unconfined</code> 在哪個 Context invoke 就在哪個 Context 跑，代表在哪跑不重要</li>
+</ul>
+<p>額外補一個 CoroutineStart</p>
+<ul>
+<li><code>CoroutineStart.Default</code> 原則上在哪呼叫就跑在哪個 Thread 上，也是 <code>launch</code>, <code>async</code>, <code>runBlocking</code> 預設選擇 Thread 的方式</li>
+</ul>
+<p>也就是說，假設你寫了一個 <code>suspend function</code> 而沒有指定 Context，而後你用 <code>runBlocking</code> 測試這個 function，那麼他實際上會用 <code>Dispatchers.Main</code> 跑在 Main Thread<br>(如果測試 function 沒特別用其他 Context 包起來的話)</p>
+<h3 id="原因-…"><a href="#原因-…" class="headerlink" title="原因 …"></a>原因 …</h3><p>其實看 <a target="_blank" rel="noopener" href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a> 就差不多了，非常精彩<br>而我自己理解的重點就如上面結論那樣</p>
+<h3 id="還是補充一下"><a href="#還是補充一下" class="headerlink" title="還是補充一下"></a>還是補充一下</h3><p>這邊要引用 <a target="_blank" rel="noopener" href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a><br>提一下 <code>Dispatchers.IO</code> 和 <code>Dispatchers.Default</code> 的差別</p>
+<blockquote>
+<p>基本上兩者最大的差異在以創建的 Worker 數量會不同。</p>
+</blockquote>
+<p>重點在這張圖<br><img src="https://i.imgur.com/MikaG53.png"></p>
+<p><code>Default</code> 預設 non blocking task，所以會進入上面的 if，呼叫 <code>signalCpuWork()</code></p>
+<blockquote>
+<p>可以看到 <code>dispatch()</code> 預設 <code>taskContext: TaskContext = NonBlockingContext</code><br><img src="https://i.imgur.com/hc7ooRP.png"></p>
+</blockquote>
+<p>而 <code>IO</code> 則是 blocking task，所以會走下面的 else，呼叫 <code>signalBlockingWork()</code><br>透過算法讓 Worker 數量拉大</p>
+<blockquote>
+<p>開頭就跟你說 <code>blocking(...)</code><br><img src="https://i.imgur.com/4jLeG3N.png"><br>實際上點進去看，也的確能看到 <code>TASK_PROBABLY_BLOCKING</code><br><img src="https://i.imgur.com/aZFIYv9.png"></p>
+</blockquote>
+<p>最後還是從文中引用</p>
+<blockquote>
+<p>所以可以得到一個結論是， IO 與 Default 的差別在於 Default 開的 thread 會受到 CPU core 限制，而 IO 則會比 Default 多上不少。</p>
+</blockquote>
+<h3 id="再補充一些"><a href="#再補充一些" class="headerlink" title="再補充一些"></a>再補充一些</h3><p>這邊我們再回顧一下官網的例子<br>這次應該可以看得更明白了</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">launch &#123; <span class="comment">// context of the parent, main runBlocking coroutine</span></span><br><span class="line">    println(<span class="string">&quot;main runBlocking      : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Unconfined) &#123; <span class="comment">// not confined -- will work with main thread</span></span><br><span class="line">    println(<span class="string">&quot;Unconfined            : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Default) &#123; <span class="comment">// will get dispatched to DefaultDispatcher </span></span><br><span class="line">    println(<span class="string">&quot;Default               : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(newSingleThreadContext(<span class="string">&quot;MyOwnThread&quot;</span>)) &#123; <span class="comment">// will get its own new thread</span></span><br><span class="line">    println(<span class="string">&quot;newSingleThreadContext: I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這四個 <code>println()</code> 分別跑在這幾個 Coroutine Context 上 (順序不定)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main runBlocking      : I&#x27;m working in thread main</span><br><span class="line">Unconfined            : I&#x27;m working in thread main</span><br><span class="line">Default               : I&#x27;m working in thread DefaultDispatcher-worker-1</span><br><span class="line">newSingleThreadContext: I&#x27;m working in thread MyOwnThread</span><br></pre></td></tr></table></figure>
+
+<h4 id="第一個-launch"><a href="#第一個-launch" class="headerlink" title="第一個 launch"></a>第一個 <code>launch</code></h4><ol>
+<li>沒有指定 <code>CoroutineStart</code>，同義於 <code>launch(start = CoroutineStart.Default)</code></li>
+<li>沒有指定 <code>Dispatchers</code></li>
+</ol>
+<p>根據 1.，我們知道是 “在哪呼叫就跑在哪個 Thread 上”<br>而這段程式執行時外面沒有再特別包 Context<br>配合 2.，結果就是跑在 Main Thread 上，等同於指定 <code>Dispatchers.Main</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">main runBlocking      : I&#x27;m working in thread main</span><br></pre></td></tr></table></figure>
+
+<p>以下省略 “沒有指定 <code>CoroutineStart</code>“ 的說明</p>
+<h4 id="第二個-launch-指定了-Dispatchers-Unconfined"><a href="#第二個-launch-指定了-Dispatchers-Unconfined" class="headerlink" title="第二個 launch 指定了 Dispatchers.Unconfined"></a>第二個 <code>launch</code> 指定了 <code>Dispatchers.Unconfined</code></h4><p>前面我們提到 <code>Dispatchers.Unconfined</code> 是 “在哪個 Context invoke 就在哪個 Context 跑”<br>以這段程式來說，執行時外面沒有特別包 Context，所以基本上就是 Main Thread<br>在 Main 上 invoke <code>Dispatchers.Unconfined</code> 當然還是跑在 Main 上囉</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unconfined            : I&#x27;m working in thread main</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三個-launch-指定了-Dispatchers-Default"><a href="#第三個-launch-指定了-Dispatchers-Default" class="headerlink" title="第三個 launch 指定了 Dispatchers.Default"></a>第三個 <code>launch</code> 指定了 <code>Dispatchers.Default</code></h4><p>這邊會用到 Kotlin 預先定義好的 Thread 去跑<br>實際上則是會被 <code>DefaultDispatcher-worker</code> 撿去做，沒有 worker 的話就會放進 schedule queue</p>
+<p>worker 後面帶的數字最大等於 <code>CORE_POOL_SIZE</code>，也就是 worker 的總數</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Default               : I&#x27;m working in thread DefaultDispatcher-worker-1</span><br></pre></td></tr></table></figure>
+
+<h4 id="第四個-launch-指定了自定義的-Thread"><a href="#第四個-launch-指定了自定義的-Thread" class="headerlink" title="第四個 launch 指定了自定義的 Thread"></a>第四個 <code>launch</code> 指定了自定義的 Thread</h4><p>欸 … 怎麼不是 <code>Dispatchers.IO</code><br>這邊直接引用官網的文字</p>
+<blockquote>
+<p>newSingleThreadContext creates a thread for the coroutine to run. A dedicated thread is a very expensive resource. In a real application it must be either released, when no longer needed, using the close function, or stored in a top-level variable and reused throughout the application.</p>
+</blockquote>
+<p>摁，所以沒有特殊需求的話不太會用到自定義這招</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">newSingleThreadContext: I&#x27;m working in thread MyOwnThread</span><br></pre></td></tr></table></figure>
+
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>感謝各方大神的文章<br>這次看完終於有點通了<br>也才發現以前在 Quarkus 上用 suspend function 根本在亂寫<br>難怪 vertx 整天報 warning 說 thread 卡太久</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%B8%E7%BF%92/" rel="tag"><i class="fa fa-tag"></i> 學習</a>
+              <a href="/tags/Kotlin/" rel="tag"><i class="fa fa-tag"></i> Kotlin</a>
+              <a href="/tags/Coroutine/" rel="tag"><i class="fa fa-tag"></i> Coroutine</a>
+              <a href="/tags/Dispatcher/" rel="tag"><i class="fa fa-tag"></i> Dispatcher</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/05/22/180522_writing-latex-in-vscode/" rel="prev" title="Writing LaTeX in VSCode">
+                  <i class="fa fa-chevron-left"></i> Writing LaTeX in VSCode
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/06/21/220621_android-runtime/" rel="next" title="Android Runtime">
+                  Android Runtime <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" rel="noopener" href='https://github.com/mdes4214'>Jack Lo</a></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+
+</body>
+</html>

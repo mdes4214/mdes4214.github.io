@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TVSN Install NoteTVSN 安裝筆記補充說明照著TVSN GitHub安裝及測試中碰到的一些問題">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TVSN Install Note">
+<meta property="og:url" content="http://example.com/2018/03/08/180308_tvsn-install-note/index.html">
+<meta property="og:site_name" content="Jack&#39;s 學習筆記">
+<meta property="og:description" content="TVSN Install NoteTVSN 安裝筆記補充說明照著TVSN GitHub安裝及測試中碰到的一些問題">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/Pq6uB3l.jpg">
+<meta property="article:published_time" content="2018-03-08T14:40:00.000Z">
+<meta property="article:modified_time" content="2022-06-22T17:10:25.246Z">
+<meta property="article:author" content="Jack Lo">
+<meta property="article:tag" content="安裝筆記">
+<meta property="article:tag" content="CGLab">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="TVSN">
+<meta property="article:tag" content="GAN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Pq6uB3l.jpg">
+
+
+<link rel="canonical" href="http://example.com/2018/03/08/180308_tvsn-install-note/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2018/03/08/180308_tvsn-install-note/","path":"2018/03/08/180308_tvsn-install-note/","title":"TVSN Install Note"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TVSN Install Note | Jack's 學習筆記</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Jack's 學習筆記</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">沒寫真的會忘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">18</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">10</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">6</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TVSN-Install-Note"><span class="nav-number">1.</span> <span class="nav-text">TVSN Install Note</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83"><span class="nav-number">1.1.</span> <span class="nav-text">參考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TVSN"><span class="nav-number">1.1.1.</span> <span class="nav-text">TVSN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA-8-0-amp-OpenCV-3-0-0"><span class="nav-number">1.1.2.</span> <span class="nav-text">CUDA 8.0 &amp; OpenCV 3.0.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%92%B0%E5%A2%83"><span class="nav-number">1.2.</span> <span class="nav-text">環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Torch"><span class="nav-number">1.3.</span> <span class="nav-text">Torch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STN-BHWD"><span class="nav-number">1.4.</span> <span class="nav-text">STN BHWD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TVSN-1"><span class="nav-number">1.5.</span> <span class="nav-text">TVSN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ShapeNet"><span class="nav-number">1.6.</span> <span class="nav-text">ShapeNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E9%97%9C%E5%A5%97%E4%BB%B6"><span class="nav-number">1.7.</span> <span class="nav-text">相關套件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-GL"><span class="nav-number">1.7.1.</span> <span class="nav-text">1. GL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-GLEW"><span class="nav-number">1.7.2.</span> <span class="nav-text">2. GLEW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-GLM"><span class="nav-number">1.7.3.</span> <span class="nav-text">3. GLM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-FreeImage-FreeImagePlus"><span class="nav-number">1.7.4.</span> <span class="nav-text">4. FreeImage, FreeImagePlus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-MATLAB"><span class="nav-number">1.7.5.</span> <span class="nav-text">5. MATLAB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-OpenEXR"><span class="nav-number">1.7.6.</span> <span class="nav-text">6. OpenEXR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ObjRenderer"><span class="nav-number">1.8.</span> <span class="nav-text">ObjRenderer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shader%E4%BF%AE%E6%94%B9"><span class="nav-number">1.8.1.</span> <span class="nav-text">shader修改</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MatlabEXR"><span class="nav-number">1.9.</span> <span class="nav-text">MatlabEXR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gcc%E7%89%88%E6%9C%AC%E5%95%8F%E9%A1%8C"><span class="nav-number">1.9.1.</span> <span class="nav-text">gcc版本問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exrread-cpp"><span class="nav-number">1.9.2.</span> <span class="nav-text">exrread.cpp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generate-Visibility-Map"><span class="nav-number">1.10.</span> <span class="nav-text">Generate Visibility Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metadata"><span class="nav-number">1.11.</span> <span class="nav-text">Metadata</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-DOAFN"><span class="nav-number">1.12.</span> <span class="nav-text">Training DOAFN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-TVSN"><span class="nav-number">1.13.</span> <span class="nav-text">Training TVSN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#out-of-memory"><span class="nav-number">1.13.1.</span> <span class="nav-text">out of memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compare-number-with-nil"><span class="nav-number">1.13.2.</span> <span class="nav-text">compare number with nil</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Testing-TVSN"><span class="nav-number">1.14.</span> <span class="nav-text">Testing TVSN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%EF%BC%9Afblualib-%E6%9C%AA%E8%A3%9D%E6%88%90%E5%8A%9F"><span class="nav-number">1.15.</span> <span class="nav-text">補：fblualib (未裝成功)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mstch"><span class="nav-number">1.15.1.</span> <span class="nav-text">Mstch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zstd"><span class="nav-number">1.15.2.</span> <span class="nav-text">Zstd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fbthrift"><span class="nav-number">1.15.3.</span> <span class="nav-text">fbthrift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thpp"><span class="nav-number">1.15.4.</span> <span class="nav-text">thpp</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Jack Lo"
+      src="/images/photo.jpg">
+  <p class="site-author-name" itemprop="name">Jack Lo</p>
+  <div class="site-description" itemprop="description">(Coffee) -> (Magic) -> Code</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/mdes4214" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;mdes4214" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mdes4214@gmail.com" title="E-Mail → mailto:mdes4214@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/03/08/180308_tvsn-install-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/photo.jpg">
+      <meta itemprop="name" content="Jack Lo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jack's 學習筆記">
+      <meta itemprop="description" content="(Coffee) -> (Magic) -> Code">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TVSN Install Note | Jack's 學習筆記">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TVSN Install Note
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-03-08 22:40:00" itemprop="dateCreated datePublished" datetime="2018-03-08T22:40:00+08:00">2018-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-23 01:10:25" itemprop="dateModified" datetime="2022-06-23T01:10:25+08:00">2022-06-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Deep-Learning/TVSN/" itemprop="url" rel="index"><span itemprop="name">TVSN</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TVSN-Install-Note"><a href="#TVSN-Install-Note" class="headerlink" title="TVSN Install Note"></a>TVSN Install Note</h1><p>TVSN 安裝筆記<br>補充說明照著<a target="_blank" rel="noopener" href="https://github.com/silverbottlep/tvsn">TVSN GitHub</a>安裝及測試中碰到的一些問題</p>
+<span id="more"></span>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><h3 id="TVSN"><a href="#TVSN" class="headerlink" title="TVSN"></a>TVSN</h3><p><a target="_blank" rel="noopener" href="https://github.com/silverbottlep/tvsn">TVSN GitHub</a><br>Transformation-Grounded Image Generation Network for Novel 3D View Synthesis<br><a target="_blank" rel="noopener" href="http://www.cs.unc.edu/~eunbyung/">Eunbyung Park</a>, <a target="_blank" rel="noopener" href="https://eng.ucmerced.edu/people/jyang44/">Jimei Yang</a>, <a target="_blank" rel="noopener" href="http://www.meyumer.com/">Ersin Yumer</a>, <a target="_blank" rel="noopener" href="http://www.duygu-ceylan.com/">Duygu Ceylan</a>, <a target="_blank" rel="noopener" href="http://acberg.com/">Alexander C. Berg</a>, CVPR 2017<br><a target="_blank" rel="noopener" href="http://www.cs.unc.edu/~eunbyung/tvsn/">[Paper]</a> <a target="_blank" rel="noopener" href="http://www.cs.unc.edu/~eunbyung/tvsn/">[Project Homepage]</a></p>
+<h3 id="CUDA-8-0-amp-OpenCV-3-0-0"><a href="#CUDA-8-0-amp-OpenCV-3-0-0" class="headerlink" title="CUDA 8.0 &amp; OpenCV 3.0.0"></a>CUDA 8.0 &amp; OpenCV 3.0.0</h3><p><a target="_blank" rel="noopener" href="http://www.pyimagesearch.com/2016/07/11/compiling-opencv-with-cuda-support/">Compiling OpenCV with CUDA support</a><br><a target="_blank" rel="noopener" href="https://hackmd.io/s/ByEYdX0al">在你的ubuntu機器上安裝openCV</a><br><a target="_blank" rel="noopener" href="https://hackmd.io/s/rk_WrHvRe">Caffe Install Note</a></p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>Linux Mint 18.1 Serena (Ubuntu 16.04)<br>GPU - Nvidia GTX 1080 8GB<br>CUDA 8.0<br>OpenCV 3.0.0<br>gcc 5.4.0</p>
+<h2 id="Torch"><a href="#Torch" class="headerlink" title="Torch"></a>Torch</h2><p><a target="_blank" rel="noopener" href="http://torch.ch/docs/getting-started.html#_">Getting started with Torch</a><br>安裝完後</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install torch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install cutorch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install nn</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install paths</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="STN-BHWD"><a href="#STN-BHWD" class="headerlink" title="STN BHWD"></a>STN BHWD</h2><p><a target="_blank" rel="noopener" href="https://github.com/qassemoquab/stnbhwd">stnbhwd</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install https://raw.githubusercontent.com/qassemoquab/stnbhwd/master/stnbhwd-scm-1.rockspec</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id="TVSN-1"><a href="#TVSN-1" class="headerlink" title="TVSN"></a>TVSN</h2><p><code>git clone</code>至自訂位置<code>$(tvsn_root)</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/silverbottlep/tvsn.git</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ShapeNet"><a href="#ShapeNet" class="headerlink" title="ShapeNet"></a>ShapeNet</h2><p><a target="_blank" rel="noopener" href="https://shapenet.org/">shapenet.org</a><br>申請帳號並通過管理員認證後，下載<code>ShapeNetCore.v1</code><br>將其解壓縮(類別也要解壓縮)至自訂位置<code>$(SHAPENET_DATA)</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ ./make_new_chair.sh $(SHAPENET_DATA)</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ <span class="built_in">ln</span> -s $(SHAPENET_DATA)/02958343 ./car</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ <span class="built_in">ln</span> -s $(SHAPENET_DATA)/new_chair ./chair</span></span><br></pre></td></tr></table></figure>
+<h2 id="相關套件"><a href="#相關套件" class="headerlink" title="相關套件"></a>相關套件</h2><p>:::info<br>盡量去各官網下載，以免用<code>apt-get</code>裝到不完全、別的東西<br>:::</p>
+<h3 id="1-GL"><a href="#1-GL" class="headerlink" title="1. GL"></a>1. GL</h3><p>我是在之前裝CUDA的時候順便裝好的<br>可參考<a target="_blank" rel="noopener" href="https://hackmd.io/s/rk_WrHvRe">Caffe Install Note</a></p>
+<h3 id="2-GLEW"><a href="#2-GLEW" class="headerlink" title="2. GLEW"></a>2. GLEW</h3><p><a target="_blank" rel="noopener" href="http://glew.sourceforge.net/">GLEW</a> &#x2F; vesion 2.1.0<br>下載後解壓縮，再依照README install</p>
+<p>由於他是安裝在<code>~/usr/lib64</code>，故要做連結</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -s /usr/lib64/libGLEW.so.2.1 /usr/lib/libGLEW.so.2.1</span> </span><br></pre></td></tr></table></figure>
+
+<h3 id="3-GLM"><a href="#3-GLM" class="headerlink" title="3. GLM"></a>3. GLM</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">apt-get install libglm-dev</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-FreeImage-FreeImagePlus"><a href="#4-FreeImage-FreeImagePlus" class="headerlink" title="4. FreeImage, FreeImagePlus"></a>4. FreeImage, FreeImagePlus</h3><p><a target="_blank" rel="noopener" href="http://freeimage.sourceforge.net/download.html">FreeImage</a> &#x2F; version 3.17.0<br>下載後解壓縮，再依照README install</p>
+<p>會看到類似<code>error: invalid character &#39; &#39; in raw string delimiter</code>的error<br>參考<a target="_blank" rel="noopener" href="http://blog.csdn.net/woainishifu/article/details/71451119">Linux(ubuntu系統)下使用FreeImage庫 - CSDN博客</a><br>在<code>$(FreeImage_root)/Source/LibWebP/src/dsp</code>的<br><code>dsp.upsampling_mips_dsp_r2.c</code>和<code>dsp.yuv_mips_dsp_r2.c</code><br>因為C++11將R作為raw string，而上述檔案中將R作為macro使用<br>故找到對應位置把RGB的R改成Red即可</p>
+<h3 id="5-MATLAB"><a href="#5-MATLAB" class="headerlink" title="5. MATLAB"></a>5. MATLAB</h3><p>安裝2017b版本<br>進入<code>~/.bashrc</code>在最下面<code>PATH</code>後面加上<code>:$(MATLAB_root)/R2017b/bin</code><br>類似於</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$PATH:$(MATLAB_root)/R2017b/bin</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-OpenEXR"><a href="#6-OpenEXR" class="headerlink" title="6. OpenEXR"></a>6. OpenEXR</h3><p>參考<a target="_blank" rel="noopener" href="http://www.linuxidc.com/Linux/2012-08/68050.htm">Ubuntu下編譯安裝OpenEXR - Linux公社</a><br>到<a target="_blank" rel="noopener" href="http://www.openexr.com/downloads.html">OpenEXR</a>下載<code>OpenEXR-2.2.1</code>及<code>IlmBase-2.2.1</code><br>到<a target="_blank" rel="noopener" href="http://zlib.net/">zlib</a>下載<code>zlib-1.2.11</code><br>並解壓縮到指定位置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo tar -zxvf ilmbase-2.2.1.tar.gz -C /usr/local/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo tar -zxvf openexr-2.2.1.tar.gz -C /usr/local/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo tar -zxvf zlib-1.2.11.tar.gz -C /usr/local/</span></span><br></pre></td></tr></table></figure>
+<p>在各自目錄下進行安裝<br>記得OpenEXR要最後裝</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ./configure</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo make install</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ObjRenderer"><a href="#ObjRenderer" class="headerlink" title="ObjRenderer"></a>ObjRenderer</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root) $ git <span class="built_in">clone</span> https://github.com/silverbottlep/ObjRenderer.git</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root) $ <span class="built_in">cd</span> ObjRenderer</span></span><br></pre></td></tr></table></figure>
+<p>在<code>$(tvsn_root)/ObjRenderer/ImageUtils.h</code>中約第78行<br>因為<code>cv::vector</code>在OpenCV 3.0.0之後廢除了，要改成<code>std::vector</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cv::<span class="built_in">vector</span>&lt;uchar&gt; lut;</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;uchar&gt; lut;</span><br></pre></td></tr></table></figure>
+<h3 id="shader修改"><a href="#shader修改" class="headerlink" title="shader修改"></a>shader修改</h3><p>作者的ObjRenderer是從<a target="_blank" rel="noopener" href="https://github.com/sunweilun/ObjRenderer">sunweilun</a>的版本修改而來<br>但檢查一下code，發現有幾處缺失，會造成normal無法順利render<br>將<code>$(tvsn_root)/ObjRenderer/ObjRenderer.cpp</code>中約第90行補上</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fragList.<span class="built_in">push_back</span>(<span class="string">&quot;Shader/norm.frag&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>以及<code>$(tvsn_root)/ObjRenderer/Shader/main.frag</code>修改成</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#version 330</span></span><br><span class="line"></span><br><span class="line">uniform uint outputID;</span><br><span class="line"></span><br><span class="line">out vec4 color;</span><br><span class="line"></span><br><span class="line">vec4 <span class="title function_">shadePhong</span><span class="params">()</span>;</span><br><span class="line">vec4 <span class="title function_">shadeCoord</span><span class="params">()</span>;</span><br><span class="line">vec4 <span class="title function_">shadeBRDF</span><span class="params">()</span>;</span><br><span class="line">vec4 <span class="title function_">shadeNorm</span><span class="params">()</span>;     <span class="comment">//new</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span>(outputID)</span><br><span class="line">    &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1u</span>:</span><br><span class="line">        color = shadeCoord();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">2u</span>:</span><br><span class="line">		color = shadePhong();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3u</span>:</span><br><span class="line">		color = shadeBRDF();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">4u</span>:    <span class="comment">//new</span></span><br><span class="line">		color = shadeNorm();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著依照不同category，修改<code>config.txt</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/ObjRenderer $ <span class="built_in">cat</span> config.txt</span></span><br><span class="line">folder_path = $(SHAPENET_DATA)/02958343/ &quot;e.g. &#x27;car&#x27; category&quot;</span><br><span class="line">envmap_path = envmaps/envmap2.hdr</span><br><span class="line">theta_inc = 20</span><br><span class="line">phi_inc = 10</span><br><span class="line">phi_max = 20</span><br><span class="line">output_coord = 1</span><br><span class="line">output_norm = 1</span><br><span class="line">render_size = 1024</span><br><span class="line">output_size = 256</span><br><span class="line">reverse_normals = 1</span><br><span class="line">brightness = 0.7</span><br></pre></td></tr></table></figure>
+<p>(<strong>注意<code>folder_path</code>最後要有<code>/</code></strong>)</p>
+<p>然後make</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/ObjRenderer $ make</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/ObjRenderer $ ./dist/Release/GNU-Linux-x86/objrenderer</span></span><br></pre></td></tr></table></figure>
+
+<p>如果看到類似<br><code>X Error of failed request:  BadValue (integer parameter out of range for operation)</code>的error<br>可以試著重新安裝一些套件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get install --reinstall xserver-xorg-video-intel libgl1-mesa-glx libgl1-mesa-dri xserver-xorg-core</span>  </span><br></pre></td></tr></table></figure>
+<p>以及重開</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">reboot</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="MatlabEXR"><a href="#MatlabEXR" class="headerlink" title="MatlabEXR"></a>MatlabEXR</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root) $ <span class="built_in">cd</span> gen_vis_maps</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ wget http://www.mit.edu/~kimo/software/matlabexr/MatlabEXR.zip</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ unzip MatlabEXR.zip</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ <span class="built_in">cd</span> MatlabEXR</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps/MatlabEXR $ mex exrinfo.cpp -lIlmImf -lIex -lImath -lHalf -I/usr/local/include/OpenEXR/ -L/usr/local/lib</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps/MatlabEXR $ mex exrread.cpp -lIlmImf -lIex -lImath -lHalf -I/usr/local/include/OpenEXR/ -L/usr/local/lib</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps/MatlabEXR $ mex exrwrite.cpp -lIlmImf -lIex -lImath -lHalf -I/usr/local/include/OpenEXR/ -L/usr/local/lib</span></span><br></pre></td></tr></table></figure>
+<p>(注意OpenEXR位置可能不同 ex: <code>/usr/include/OpenEXR/</code>)</p>
+<p>還會碰到一些warning及error</p>
+<h3 id="gcc版本問題"><a href="#gcc版本問題" class="headerlink" title="gcc版本問題"></a>gcc版本問題</h3><p>會跳出warning，說只支援gcc 4.9.x以下，可以無視</p>
+<h3 id="exrread-cpp"><a href="#exrread-cpp" class="headerlink" title="exrread.cpp"></a>exrread.cpp</h3><p>跳出類似<code>error: cannot convert ‘int*’ to ‘const size_t*&#39;</code>的error<br>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/43045701/switch-compiler-on-matlab-2017a-in-ubuntu-os">Switch compiler on Matlab 2017a in Ubuntu OS - Stack Overflow</a><br>到<code>$(tvsn_root)/gen_vis_maps/MatlabEXR/exrread.cpp</code>約第103行</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> dims[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mwSize dims[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<h2 id="Generate-Visibility-Map"><a href="#Generate-Visibility-Map" class="headerlink" title="Generate Visibility Map"></a>Generate Visibility Map</h2><p>因為在<code>gen_vis_maps.sh</code>最後會用到<code>fb.mattorch</code>的東西 (用來做將數個.mat存成.t7)<br>本來是要裝<code>fblualib</code>，但因為相關套件版本很亂，安裝很多問題，一直失敗<br>故放棄使用<code>fb.mattorch</code>，改用<a target="_blank" rel="noopener" href="https://github.com/clementfarabet/lua---mattorch">mattorch</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">MATLAB_ROOT=$(MATLAB_root)/R2017b/ luarocks install https://raw.githubusercontent.com/clementfarabet/lua---mattorch/master/mattorch-1.0-0.rockspec</span></span><br></pre></td></tr></table></figure>
+<p>之後進<code>gen_vis_maps.lua</code><br>將</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mattorch = <span class="built_in">require</span>(<span class="string">&#x27;fb.mattorch&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mattorch = <span class="built_in">require</span>(<span class="string">&#x27;mattorch&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>另外，就這樣跑的話會出現tensor的<code>copy()</code>中src(18x18)和out(64x64)大小不符的error<br>可能是<code>fb.mattorch</code>與<code>mattorch</code>的差異？(沒用<code>fb.mattorch</code>跑成功過，所以不知道)<br>原本在<code>gen_vis_maps.m</code>中的out_maps為64x64x18x18<br>但在<code>gen_vis_maps.lua</code>經由<code>mattorch.load()</code>讀進來的out_maps為18x18x64x64<br>猜測應該是順序相反，故將<code>gen_vis_maps.lua</code>中</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m = mat.out_map[&#123;&#123;&#125;,&#123;&#125;,&#123;in_theta&#125;,&#123;trans&#125;&#125;]:squeeze()</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m = mat.out_map[&#123;&#123;trans&#125;,&#123;in_theta&#125;,&#123;&#125;,&#123;&#125;&#125;]:transpose(<span class="number">3</span>, <span class="number">4</span>):squeeze()</span><br></pre></td></tr></table></figure>
+
+<p>上面處理完就可以進行下一步<br>(以category car為例)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ ./gen_vis_maps.sh $(SHAPENET_DATA)/02958343 car</span></span><br></pre></td></tr></table></figure>
+<p>碰到類似<code>Missing symbol &#39;_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4findEcm&#39;</code><br>參考<a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe/issues/5447">Error in make mattest - Issue #5447 - BVLC&#x2F;Caffe</a><br>進<code>~/.bashrc</code>最後加上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">export</span> LD_PRELOAD=<span class="variable">$LD_PRELOAD</span>:/usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libprotobuf.so.9</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Metadata"><a href="#Metadata" class="headerlink" title="Metadata"></a>Metadata</h2><p>在training前，要建立metadata的cache<br>內容主要是記錄training set和testing set的數量<br>(以category car為例)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code $ th make_metadata.lua --category car</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Training-DOAFN"><a href="#Training-DOAFN" class="headerlink" title="Training DOAFN"></a>Training DOAFN</h2><p>training</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code $ ./script_train_doafn.sh</span></span><br></pre></td></tr></table></figure>
+<p>預設category為car，可進<code>script_train_doafn.sh</code>修改</p>
+<h2 id="Training-TVSN"><a href="#Training-TVSN" class="headerlink" title="Training TVSN"></a>Training TVSN</h2><p>下載pretrained vgg16 model</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code/lossnet $ ./download_lossnet.sh</span></span><br></pre></td></tr></table></figure>
+<p>在train之前還要修改一些東西，不然等等會出錯</p>
+<h3 id="out-of-memory"><a href="#out-of-memory" class="headerlink" title="out of memory"></a>out of memory</h3><p>記得把<code>--batchSize</code>改成<code>10</code>，預設的<code>15</code>用GTX1080(8GB RAM)跑會out of memory</p>
+<h3 id="compare-number-with-nil"><a href="#compare-number-with-nil" class="headerlink" title="compare number with nil"></a>compare number with nil</h3><p><code>script_train_tvsn.sh</code>總共會執行三次<code>train_tvsn.lua</code><br><code>epoch=1~100</code>、<code>epoch=101~200</code>、<code>epoch=201~220</code>分別用三組不同的參數進行training<br>若什麼都沒修改的話，在執行第二次training(<code>epoch=101~200</code>)就會開始噴error<br><code>train_tvsn.lua:141: attempt to compare number with nil</code><br>這是因為<code>train_tvsn.lua</code>第141行的</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> opt.resetD &gt; <span class="number">0</span> <span class="keyword">then</span></span><br></pre></td></tr></table></figure>
+<p><code>opt.resetD</code>為<code>nil</code>，無法與<code>0</code>做比較<br>由於第二、三次training是接續第一次training的，應該會希望Discriminator的error值延續，不必reset<br>故將<code>opt.resetD</code>的初始值設為<code>0</code><br>在<code>train_tvsn.lua</code>開頭處的<code>opt</code>設定中，約第39行加入</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--resetD            (default 0)</span></span><br></pre></td></tr></table></figure>
+
+<p>上面都修改完就可以進行training</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code $ ./script_train_tvsn.sh</span></span><br></pre></td></tr></table></figure>
+<p>預設category為car，可進<code>script_train_tvsn.sh</code>修改</p>
+<h2 id="Testing-TVSN"><a href="#Testing-TVSN" class="headerlink" title="Testing TVSN"></a>Testing TVSN</h2><p>(以category car為例)<br>在<code>$(tvsn_root)/tvsn/code/test_tvsn.lua</code>中約第41行</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">opt.doafn_path = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">&#x27;DOAFN_SYM_%s_%s_bs025/net-epoch-200.t7&#x27;</span>,opt.imgscale,opt.category)</span><br></pre></td></tr></table></figure>
+<p>要註解掉，doafn_path參數由外面送進去</p>
+<p><em><strong>注意</strong></em><br>在一開始<code>opt</code>設定中，約第29行加入</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--batchSize         (default 15)</span></span><br></pre></td></tr></table></figure>
+<p>並往下找，找到</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> n_batch = <span class="number">15</span></span><br></pre></td></tr></table></figure>
+<p>將其改成</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> n_batch = opt.batchSize</span><br></pre></td></tr></table></figure>
+<p>以及</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>,n_samples,<span class="number">15</span> <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">collectgarbage</span>()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;processing &#x27;</span> .. i)</span><br><span class="line">    <span class="keyword">for</span> j=<span class="number">1</span>,<span class="number">15</span> <span class="keyword">do</span></span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>,n_samples,n_batch <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">collectgarbage</span>()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;processing &#x27;</span> .. i)</span><br><span class="line">    <span class="keyword">for</span> j=<span class="number">1</span>,n_batch <span class="keyword">do</span></span><br></pre></td></tr></table></figure>
+<p><em><strong>一定要這麼做，不然當training時使用的batchSize改變(非原本的15)，testing會直接爆炸</strong></em></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code/ $ th test_tvsn.lua --category car --doafn_path ../snapshots/pretrained/doafn_car_epoch200.t7 --tvsn_path ../snapshots/pretrained/tvsn_car_epoch220.t7 --batchSize 10 --plot 1</span></span><br></pre></td></tr></table></figure>
+<p>(<em><strong>記得補上training時的batchSize</strong></em>，作者的pretrained model是用15，這裡因為GTX1080 memory不夠，所以用10，加上<code>--batchSize 10</code>)<br>(記得要加上<code>--plot 1</code>，否則不會畫出結果)</p>
+<p>結果圖存在<code>$(tvsn_root)/tvsn/code/result_car</code></p>
+<p>下圖是用作者的pretrained model跑出來的結果圖1 (可以看出batchSize&#x3D;15)<br>column 1~6 分別是 input &#x2F; target(ground truth) &#x2F; AFN &#x2F; visibility map &#x2F; DOAFN &#x2F; TVSN<br><img src="https://i.imgur.com/Pq6uB3l.jpg" alt="test001.jpg"></p>
+<h2 id="補：fblualib-未裝成功"><a href="#補：fblualib-未裝成功" class="headerlink" title="補：fblualib (未裝成功)"></a>補：fblualib (未裝成功)</h2><p>參考<a target="_blank" rel="noopener" href="https://github.com/facebookarchive/fblualib">fblualib</a><br>及其中的<a target="_blank" rel="noopener" href="https://github.com/facebookarchive/fblualib/blob/master/INSTALL.md">INSTALL.md</a><br>可惜他的<code>install_all.sh</code>中的這段</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 13\.10 ]]; <span class="keyword">then</span></span><br><span class="line">    :</span><br><span class="line"><span class="keyword">elif</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 14 ]]; <span class="keyword">then</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line"><span class="keyword">elif</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 15\.04 ]]; <span class="keyword">then</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line"><span class="keyword">elif</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 16\.04 ]]; <span class="keyword">then</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line">    current=1</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Ubuntu 13.10, 14.*, 15.04 or 16.04 required&quot;</span> &gt;&amp;2</span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>由於使用的系統是<code>Linux Mint 18.1 Serena</code>，理論上要被當成<code>Ubuntu 16.04</code><br>但仍然過不了<br>故直接下載<code>install_all.sh</code>，並修改成</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ubuntu 16.04</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line">    current=1</span><br></pre></td></tr></table></figure>
+<p>接著執行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo bash ./install_all.sh</span></span><br></pre></td></tr></table></figure>
+<p>應該到<code>Building fbthrift</code>的時候就會噴error<br>因為<code>fbthrift</code>最新版的安裝方式，從automake改成用cmake (然而fblualib的github卻沒有更新…)<br>這裡開始就很麻煩<br>為了裝<code>fbthrift</code>，首先要裝其套件，剛剛裝下來還缺幾個</p>
+<h3 id="Mstch"><a href="#Mstch" class="headerlink" title="Mstch"></a>Mstch</h3><p><a target="_blank" rel="noopener" href="https://github.com/no1msd/mstch">Mstch</a><br>git clone下來後照著裝即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<h3 id="Zstd"><a href="#Zstd" class="headerlink" title="Zstd"></a>Zstd</h3><p><a target="_blank" rel="noopener" href="https://github.com/facebook/zstd">Zstd</a><br>一樣git clone下來後照著裝即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span> </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<h3 id="fbthrift"><a href="#fbthrift" class="headerlink" title="fbthrift"></a>fbthrift</h3><p><a target="_blank" rel="noopener" href="https://github.com/facebook/fbthrift">fbthrift</a><br>最麻煩的來了<br>首先一樣照著跑</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/facebook/fbthrift</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make -j 8</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<p>理論上不會出錯，乍看之下很順利，但等等裝<code>thpp</code>就會炸了<br>到時候裝<code>thpp</code>會噴<code>no module named thrift_compiler</code>的error<br>參考<a target="_blank" rel="noopener" href="https://github.com/facebook/thpp/issues/2">build error ‘no module named thrift_compiler’ - Issue #2 - facebook&#x2F;thpp</a><br>及<a target="_blank" rel="noopener" href="https://github.com/facebook/fbthrift/issues/26#issuecomment-55318058">build failure ‘cannot import name frontend’ - Issue #26 - facebook&#x2F;fbthrift</a><br>還有<a target="_blank" rel="noopener" href="https://github.com/facebook/fbthrift/issues/249">cannot import name frontend - Issue #249 - facebook&#x2F;fbthrift</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo python setup.py install</span></span><br></pre></td></tr></table></figure>
+<p>這樣理論上在裝<code>thpp</code>時就不會有<code>no module named thrift_compiler</code>的error<br>…<br>..而是噴另一個error: <code>cannot import name frontend</code> (唉)<br>處理方法是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">g++ -I /usr/include/python2.7 -I $(fbthrift_root) -std=c++14 -fpic -shared -o frontend.so compiler.cc -lboost_python -lpython2.7 -L/build/lib -lcompiler_base -lcompiler_ast -lboost_system -lboost_filesystem -lssl -lcrypto</span></span><br></pre></td></tr></table></figure>
+<p>…然後就會有另一個error: <code>relocation R_X86_64_32 against</code><br>打開<code>$(fbthrift_root)</code>的<code>CMakelists.txt</code><br>在</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set(CMAKE_CXX_STANDARD 14) #Requires CMake 3.1.3</span><br></pre></td></tr></table></figure>
+<p>下面加上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set(CMAKE_CXX_FLAGS &quot;-fPIC&quot;)</span><br><span class="line">set(CMAKE_C_FLAGS &quot;-fPIC&quot;)</span><br></pre></td></tr></table></figure>
+<p>然後重跑一次整個流程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbthrift_root)/build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make -j 8</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">g++ -I /usr/include/python2.7 -I $(fbthrift_root) -std=c++14 -fpic -shared -o frontend.so compiler.cc -lboost_python -lpython2.7 -L/build/lib -lcompiler_base -lcompiler_ast -lboost_system -lboost_filesystem -lssl -lcrypto</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo python setup.py install</span></span><br></pre></td></tr></table></figure>
+<p>理論上就OK了</p>
+<h3 id="thpp"><a href="#thpp" class="headerlink" title="thpp"></a>thpp</h3><p><a target="_blank" rel="noopener" href="https://github.com/facebook/thpp">thpp</a><br>照著<a target="_blank" rel="noopener" href="https://github.com/facebook/thpp/blob/master/INSTALL.md">INSTALL.md</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/facebook/thpp.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> thpp</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./build.sh</span></span><br></pre></td></tr></table></figure>
+<p>本來應該出現的error: <code>no module named thrift_compiler</code>，<code>cannot import name frontend</code><br>因為上面的處理而解決了<br>…<br>然後就會又另一個error (…)<br><code>folly/io/IOBufQueue.h:43:20: error: ‘updateGuard’ function uses ‘auto’ type specifier without trailing return type</code><br>很多類似於這種的，看起來是C++語法錯誤，但還沒研究，先暫時放著</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AE%89%E8%A3%9D%E7%AD%86%E8%A8%98/" rel="tag"><i class="fa fa-tag"></i> 安裝筆記</a>
+              <a href="/tags/CGLab/" rel="tag"><i class="fa fa-tag"></i> CGLab</a>
+              <a href="/tags/Deep-Learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
+              <a href="/tags/TVSN/" rel="tag"><i class="fa fa-tag"></i> TVSN</a>
+              <a href="/tags/GAN/" rel="tag"><i class="fa fa-tag"></i> GAN</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/08/180308_caffe-install-note/" rel="prev" title="Caffe Install Note">
+                  <i class="fa fa-chevron-left"></i> Caffe Install Note
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/08/180308_dnl-install-note/" rel="next" title="DNL Install Note">
+                  DNL Install Note <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" rel="noopener" href='https://github.com/mdes4214'>Jack Lo</a></span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Caffe Install Note</title>
+    <url>/2018/03/08/180308_caffe-install-note/</url>
+    <content><![CDATA[<h1 id="Caffe-Install-Note"><a href="#Caffe-Install-Note" class="headerlink" title="Caffe Install Note"></a>Caffe Install Note</h1><p>記錄Caffe安裝過程及所需套件</p>
+<span id="more"></span>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="http://caffe.berkeleyvision.org/installation.html">Caffe official</a><br><a href="http://www.pyimagesearch.com/2016/07/11/compiling-opencv-with-cuda-support/">Compiling OpenCV with CUDA support</a><br><a href="https://hackmd.io/s/ByEYdX0al">在你的ubuntu機器上安裝openCV</a><br><a href="http://blog.csdn.net/xuzhongxiong/article/details/52717285">Ubuntu16.04+CUDA8.0+caffe配置</a></p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>Linux Mint 18.1 Serena (Ubuntu 16.04)<br>GPU - Nvidia GTX 1080</p>
+<h6 id="查詢Ubuntu版本"><a href="#查詢Ubuntu版本" class="headerlink" title="查詢Ubuntu版本"></a>查詢Ubuntu版本</h6><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ lsb_release -a</span><br></pre></td></tr></table></figure>
+<p>系統與套件記得先更新</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+
+<h2 id="安裝python2套件"><a href="#安裝python2套件" class="headerlink" title="安裝python2套件"></a>安裝python2套件</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get install python-pip python-dev</span><br><span class="line">$ sudo apt-get install python-numpy</span><br><span class="line">$ pip install --upgrade pip</span><br></pre></td></tr></table></figure>
+<h6 id="查詢python版本"><a href="#查詢python版本" class="headerlink" title="查詢python版本"></a>查詢python版本</h6><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ python2 --version</span><br><span class="line">$ python3 --version</span><br></pre></td></tr></table></figure>
+<p>Caffe使用的版本是python2.7</p>
+<h2 id="安裝CUDA-8-0"><a href="#安裝CUDA-8-0" class="headerlink" title="安裝CUDA 8.0"></a>安裝CUDA 8.0</h2><p>不要用<code>$ sudo apt-get install libcuda*</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">[CUDA 8.0 Downloads](https://developer.nvidia.com/cuda-downloads)</span><br><span class="line">Operating System: Linux</span><br><span class="line">Architecture: x86_64</span><br><span class="line">Distribution: Ubuntu</span><br><span class="line">Version: 16.04</span><br><span class="line">Installer Type: deb (local)</span><br><span class="line"></span><br><span class="line">下載完後移至檔案目錄</span><br><span class="line">```c=</span><br><span class="line">$ sudo dpkg -i cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64.deb</span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install cuda</span><br></pre></td></tr></table></figure>
+
+<h2 id="安裝cuDNN"><a href="#安裝cuDNN" class="headerlink" title="安裝cuDNN"></a>安裝cuDNN</h2><p>參考<a href="http://blog.csdn.net/xuzhongxiong/article/details/52717285">Ubuntu16.04+CUDA8.0+caffe配置</a><br>到<a href="https://developer.nvidia.com/rdp/cudnn-download">Nvidia官網</a>下載cuDNN<br>下載前需要先註冊一個帳號<br>由於筆者顯卡是GTX1080，再加上穩定性考量<br>故選擇<code>cuDNN v5.1 Library for Linux</code>下載<br>下載完、解壓縮後，移至<code>include</code>目錄</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo cp cudnn.h /usr/local/cuda/include/</span><br></pre></td></tr></table></figure>
+<p>再到<code>lib64</code>目錄</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo cp lib* /usr/local/cuda/lib64/</span><br><span class="line">$ cd /usr/local/cuda/lib64/</span><br><span class="line">$ sudo rm -rf libcudnn.so libcudnn.so<span class="number">.5</span></span><br><span class="line">$ sudo ln -s libcudnn.so<span class="number">.5</span><span class="number">.1</span><span class="number">.10</span> libcudnn.so<span class="number">.5</span></span><br><span class="line">$ sudo ln -s libcudnn.so<span class="number">.5</span> libcudnn.so</span><br></pre></td></tr></table></figure>
+
+<h2 id="安裝其餘相關套件-除了OpenCV"><a href="#安裝其餘相關套件-除了OpenCV" class="headerlink" title="安裝其餘相關套件(除了OpenCV)"></a>安裝其餘相關套件(除了OpenCV)</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler</span><br><span class="line">$ sudo apt-get install --no-install-recommends libboost-all-dev</span><br><span class="line">$ sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="安裝OpenCV-with-CUDA-support"><a href="#安裝OpenCV-with-CUDA-support" class="headerlink" title="安裝OpenCV (with CUDA support)"></a>安裝OpenCV (with CUDA support)</h2><p>參考<a href="https://hackmd.io/s/ByEYdX0al">在你的ubuntu機器上安裝openCV</a></p>
+<h3 id="安裝相關套件"><a href="#安裝相關套件" class="headerlink" title="安裝相關套件"></a>安裝相關套件</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo apt-get install libjpeg8-dev libtiff5-dev libjasper-dev libpng12-dev</span><br><span class="line">$ sudo apt-get install libgtk2<span class="number">.0</span>-dev</span><br><span class="line">$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev</span><br><span class="line">$ sudo apt-get install libatlas-base-dev gfortran</span><br></pre></td></tr></table></figure>
+<h3 id="安裝cmake"><a href="#安裝cmake" class="headerlink" title="安裝cmake"></a>安裝cmake</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo apt install cmake</span><br></pre></td></tr></table></figure>
+<h3 id="下載OpenCV-3-0-0"><a href="#下載OpenCV-3-0-0" class="headerlink" title="下載OpenCV 3.0.0"></a>下載OpenCV 3.0.0</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ cd ~</span><br><span class="line">$ git clone https:<span class="comment">//github.com/opencv/opencv.git</span></span><br><span class="line">$ cd opencv</span><br><span class="line">$ git checkout <span class="number">3.0</span><span class="number">.0</span></span><br><span class="line">$ git clone https:<span class="comment">//github.com/opencv/opencv_contrib.git</span></span><br><span class="line">$ cd opencv_contrib</span><br><span class="line">$ git checkout <span class="number">3.0</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+<h3 id="編譯OpenCV"><a href="#編譯OpenCV" class="headerlink" title="編譯OpenCV"></a>編譯OpenCV</h3><p>注意由於OpenCV 3.0.0和CUDA 8.0有些不兼容<br>若直接執行以下編譯過程，會在make階段出現</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">error: ‘NppiGraphcutState’ has not been declared</span><br></pre></td></tr></table></figure>
+<p>解決方式是去修改以下檔案的內容</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">~/opencv/modules/cudalegacy/src/graphcuts.cpp</span><br></pre></td></tr></table></figure>
+<p>約45行的</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> !defined (HAVE_CUDA) || defined (CUDA_DISABLER)</span></span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//#if !defined (HAVE_CUDA) || defined (CUDA_DISABLER)</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> !defined (HAVE_CUDA) || defined (CUDA_DISABLER) || (CUDART_VERSION &gt;= 8000)</span></span><br></pre></td></tr></table></figure>
+<p>以上參考自<a href="http://blog.csdn.net/xuzhongxiong/article/details/52717285">Ubuntu16.04+CUDA8.0+caffe配置</a><br>&amp;nbsp;<br>&amp;nbsp;<br>產生出makefile</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ cd ~/opencv</span><br><span class="line">$ mkdir build</span><br><span class="line">$ cd build</span><br><span class="line">$ cmake -D CMAKE_BUILD_TYPE=RELEASE \</span><br><span class="line">    -D CMAKE_INSTALL_PREFIX=/usr/local \</span><br><span class="line">    -D WITH_CUDA=ON \</span><br><span class="line">    -D ENABLE_FAST_MATH=<span class="number">1</span> \</span><br><span class="line">    -D CUDA_FAST_MATH=<span class="number">1</span> \</span><br><span class="line">    -D WITH_CUBLAS=<span class="number">1</span> \</span><br><span class="line">    -D INSTALL_PYTHON_EXAMPLES=ON \</span><br><span class="line">    -D INSTALL_C_EXAMPLES=ON \</span><br><span class="line">    -D OPENCV_EXTRA_MODULES_PATH=~/opencv/opencv_contrib/modules \</span><br><span class="line">    -D PYTHON_EXECUTABLE=/usr/lib/python2<span class="number">.7</span> \</span><br><span class="line">    -D BUILD_EXAMPLES=ON \</span><br><span class="line">    -D PYTHON_EXECUTABLE=/usr/bin/python2<span class="number">.7</span> \</span><br><span class="line">    -D PYTHON_INCLUDE_DIR=/usr/include/python2<span class="number">.7</span> \</span><br><span class="line">    -D PYTHON_INCLUDE_DIR2=/usr/include/x86_64-linux-gnu/python2<span class="number">.7</span> \</span><br><span class="line">    -D PYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython2<span class="number">.7</span>.so \</span><br><span class="line">    ..</span><br></pre></td></tr></table></figure>
+<p>用makefile編譯</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ make -j8</span><br></pre></td></tr></table></figure>
+<h3 id="安裝OpenCV"><a href="#安裝OpenCV" class="headerlink" title="安裝OpenCV"></a>安裝OpenCV</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo make install</span><br><span class="line">$ sudo ldconfig</span><br></pre></td></tr></table></figure>
+<p>注意在<code>$ sudo ldconfig</code>的時候筆者有碰到錯誤訊息</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/sbin/ldconfig.real: /usr/lib/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span> is not a symbolic link</span><br><span class="line">/sbin/ldconfig.real: /usr/lib32/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span> is not a symbolic link</span><br></pre></td></tr></table></figure>
+<p>參考<a href="http://stackoverflow.com/questions/43016255/libegl-so-1-is-not-a-symbolic-link">libEGL.so.1 is not a symbolic link - Stack Overflow</a><br>可能是<code>libEGL.lib</code>的一些衝突<br>解法如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo mv /usr/lib/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span> /usr/lib/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span>.org</span><br><span class="line">$ sudo mv /usr/lib32/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span> /usr/lib32/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span>.org</span><br><span class="line">$ sudo ln -s /usr/lib/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.375</span><span class="number">.39</span> /usr/lib/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span></span><br><span class="line">$ sudo ln -s /usr/lib32/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.375</span><span class="number">.39</span> /usr/lib32/nvidia<span class="number">-375</span>/libEGL.so<span class="number">.1</span></span><br></pre></td></tr></table></figure>
+<h6 id="另外提一下查詢自己nvidia-driver-version的方法"><a href="#另外提一下查詢自己nvidia-driver-version的方法" class="headerlink" title="另外提一下查詢自己nvidia driver version的方法"></a>另外提一下查詢自己nvidia driver version的方法</h6><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ dpkg -l | grep nvidia</span><br></pre></td></tr></table></figure>
+
+<h2 id="安裝Caffe"><a href="#安裝Caffe" class="headerlink" title="安裝Caffe"></a>安裝Caffe</h2><h3 id="下載Caffe"><a href="#下載Caffe" class="headerlink" title="下載Caffe"></a>下載Caffe</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ cd ~</span><br><span class="line">$ git clone https:<span class="comment">//github.com/BVLC/caffe.git</span></span><br></pre></td></tr></table></figure>
+<h3 id="Python-requirements"><a href="#Python-requirements" class="headerlink" title="Python requirements"></a>Python requirements</h3><p>Install the dependencies</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ cd caffe/python</span><br><span class="line">$ <span class="keyword">for</span> req in $(cat requirements.txt); <span class="keyword">do</span> sudo pip install $req; done</span><br></pre></td></tr></table></figure>
+<p>設定<code>$PYTHONPATH</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo apt install vim</span><br><span class="line">$ vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>在<code>.bashrc</code>最後加入 (按i或Insert) 並存檔 (按ESC及輸入<code>:wq</code>)</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">export PYTHONPATH=$HOME/caffe/python:$PYTHONPATH</span><br></pre></td></tr></table></figure>
+<h3 id="設定Makefile-config"><a href="#設定Makefile-config" class="headerlink" title="設定Makefile.config"></a>設定<code>Makefile.config</code></h3><p>參考<a href="http://blog.csdn.net/xuzhongxiong/article/details/52717285">Ubuntu16.04+CUDA8.0+caffe配置</a></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ cd ~/caffe</span><br><span class="line">$ sudo cp Makefile.config.example Makefile.config</span><br></pre></td></tr></table></figure>
+<p>以文字編輯器編輯<code>Makefile.config</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">使用CUDA DNN，所以將</span><br><span class="line">#USE_CUDNN := <span class="number">1</span></span><br><span class="line">修改成</span><br><span class="line">USE_CUDNN := <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">使用OpenCV3，所以將</span><br><span class="line">#OPENCV_VERSION := <span class="number">3</span> </span><br><span class="line">修改成</span><br><span class="line">OPENCV_VERSION := <span class="number">3</span> </span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">使用Python來編寫layer，所以將</span><br><span class="line">#WITH_PYTHON_LAYER := <span class="number">1</span> </span><br><span class="line">修改成</span><br><span class="line">WITH_PYTHON_LAYER := <span class="number">1</span> </span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">將</span><br><span class="line">CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \</span><br><span class="line">		-gencode arch=compute_20,code=sm_21 \</span><br><span class="line">		-gencode arch=compute_30,code=sm_30 \</span><br><span class="line">		-gencode arch=compute_35,code=sm_35 \</span><br><span class="line">		-gencode arch=compute_50,code=sm_50 \</span><br><span class="line">		-gencode arch=compute_52,code=sm_52 \</span><br><span class="line">		-gencode arch=compute_60,code=sm_60 \</span><br><span class="line">		-gencode arch=compute_61,code=sm_61 \</span><br><span class="line">		-gencode arch=compute_61,code=compute_61</span><br><span class="line">改成</span><br><span class="line">CUDA_ARCH := -gencode arch=compute_50,code=sm_50 \</span><br><span class="line">		-gencode arch=compute_52,code=sm_52 \</span><br><span class="line">		-gencode arch=compute_60,code=sm_60 \</span><br><span class="line">		-gencode arch=compute_61,code=sm_61 \</span><br><span class="line">		-gencode arch=compute_61,code=compute_61</span><br></pre></td></tr></table></figure>
+<p>由於Ubuntu 16.04的include位置發生了變化，尤其是hdf5，所以需要更改路徑</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">將</span><br><span class="line"># Whatever <span class="keyword">else</span> you find you need goes here.</span><br><span class="line">下面的</span><br><span class="line">INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include</span><br><span class="line">LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib </span><br><span class="line">修改成</span><br><span class="line">INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial</span><br><span class="line">LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/hdf5/serial       </span><br></pre></td></tr></table></figure>
+<h3 id="設定PATH"><a href="#設定PATH" class="headerlink" title="設定PATH"></a>設定PATH</h3><p>在編譯Caffe之前有些PATH要設定<br>一樣要編輯<code>.bashrc</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>在最後面補上</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH</span><br><span class="line">export PATH=$PATH:/usr/local/cuda/bin</span><br><span class="line">export CUDADIR=/usr/local/cuda</span><br><span class="line">export GLPATH=/usr/lib</span><br></pre></td></tr></table></figure>
+<p>存檔後</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ sudo ldconfig</span><br></pre></td></tr></table></figure>
+<h3 id="編譯Caffe"><a href="#編譯Caffe" class="headerlink" title="編譯Caffe"></a>編譯Caffe</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ make all -j8</span><br></pre></td></tr></table></figure>
+<p>接著編譯測試</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">$ make test -j8</span><br><span class="line">$ make runtest</span><br></pre></td></tr></table></figure>
+<p>理論上會顯示<code>[ PASSED ]</code></p>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>Caffe</category>
+      </categories>
+      <tags>
+        <tag>安裝筆記</tag>
+        <tag>CGLab</tag>
+        <tag>Deep Learning</tag>
+        <tag>Caffe</tag>
+        <tag>Framework</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DNL Install Note</title>
+    <url>/2018/03/08/180308_dnl-install-note/</url>
+    <content><![CDATA[<h1 id="DNL-Install-Note"><a href="#DNL-Install-Note" class="headerlink" title="DNL Install Note"></a>DNL Install Note</h1><p>DNL 安裝筆記</p>
+<span id="more"></span>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><h3 id="DNL"><a href="#DNL" class="headerlink" title="DNL"></a>DNL</h3><p>Predicting Depth, Surface Normals and Semantic Labels with a Common Multi-Scale Convolutional Architecture<br>David Eigen, Rob Fergus, {deigen,fergus}@cs.nyu.edu, ICCV 2015<br><a href="https://arxiv.org/pdf/1411.4734v4.pdf">[Paper]</a> <a href="https://cs.nyu.edu/~deigen/dnl/">[Homepage]</a></p>
+<h3 id="Theano"><a href="#Theano" class="headerlink" title="Theano"></a>Theano</h3><p><a href="http://deeplearning.net/software/theano/install_ubuntu.html#installation">Theano</a></p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>Linux Mint 18.1 Serena (Ubuntu 16.04)<br>GPU - Nvidia GTX 1080 8GB<br>python 2.7</p>
+<h2 id="DNL-1"><a href="#DNL-1" class="headerlink" title="DNL"></a>DNL</h2><p>從<a href="https://cs.nyu.edu/~deigen/dnl/">[Homepage]</a>下載Code的部分並解壓縮<br>dnl資料夾內的東西可以直接丟進dnl-depthnormals沒關係<br>由README得知主要需要</p>
+<ul>
+<li>theano</li>
+<li>numpy, scipy</li>
+<li>PIL or Pillow</li>
+</ul>
+<h2 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get install python-pip</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pip install --upgrade pip</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="NumPy-amp-SciPy"><a href="#NumPy-amp-SciPy" class="headerlink" title="NumPy &amp; SciPy"></a>NumPy &amp; SciPy</h2><p><a href="http://deeplearning.net/software/theano/install_ubuntu.html#installation">Theano</a>上可連結至SciPy的官網<br>按照<a href="https://scipy.org/install.html">Install</a>所寫<br>另外安裝setuptools</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pip install -U setuptools</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Pillow"><a href="#Pillow" class="headerlink" title="Pillow"></a>Pillow</h2><p>PIL貌似沒有再更新，目前是以Pillow為主</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo -H pip install pillow</span><br></pre></td></tr></table></figure>
+
+<h2 id="Theano-1"><a href="#Theano-1" class="headerlink" title="Theano"></a>Theano</h2><p>Theano是一個deeplearning的框架<br>安裝過程大部分按照<a href="http://deeplearning.net/software/theano/install_ubuntu.html#installation">Theano</a>上所寫的，主要利用pip來裝theano和libgpuarray<br>只是要注意版本問題，讓theano維持在0.9.X、libgpuarray維持在v0.7.0<br>還有安裝過程有碰到問題，另外安裝python-tk及更新cython</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get install python-tk</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pip install --upgrade cython</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo pip install git+https://github.com/theano/theano@0.9.X</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/Theano/libgpuarray.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> libgpuarray</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git checkout tags/v0.7.0 -b v0.7.0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> Build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> Build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake .. -DCMAKE_BUILD_TYPE=Release</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo make install</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python setup.py build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo python setup.py install</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ldconfig</span></span><br></pre></td></tr></table></figure>
+<p>最後再在家目錄下新增一個文件，避免之後TypeError的問題</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi ~/.theanorc</span></span><br></pre></td></tr></table></figure>
+<p>文件內容是</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[global]</span><br><span class="line">floatX = float32</span><br><span class="line">device = gpu0</span><br><span class="line"></span><br><span class="line">[nvcc]</span><br><span class="line">fastmath = True</span><br></pre></td></tr></table></figure>
+
+<h2 id="DEMO"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</h2><p>都弄好後就可以回到dnl-depthnormals目錄，按照README所說<br>執行depth, normals的demo</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">THEANO_FLAGS=device=gpu0 python demo_depthnormals.py</span></span><br></pre></td></tr></table></figure>
+<p>執行labels的demo</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">THEANO_FLAGS=device=gpu0 python demo_semlabels_nyud.py</span></span><br></pre></td></tr></table></figure>
+<p>結果如下，上面是input，下面由左而右是depth, normals, labels<br><img src="https://i.imgur.com/Gq3COGA.jpg" alt="input"><br><img src="https://i.imgur.com/br6HSXc.png" alt="depth"> <img src="https://i.imgur.com/rL2WYTj.png" alt="normals"> <img src="https://i.imgur.com/1dDrSml.png" alt="labels"></p>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>DNL</category>
+      </categories>
+      <tags>
+        <tag>安裝筆記</tag>
+        <tag>CGLab</tag>
+        <tag>Deep Learning</tag>
+        <tag>DNL</tag>
+        <tag>CNN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TVSN Install Note</title>
+    <url>/2018/03/08/180308_tvsn-install-note/</url>
+    <content><![CDATA[<h1 id="TVSN-Install-Note"><a href="#TVSN-Install-Note" class="headerlink" title="TVSN Install Note"></a>TVSN Install Note</h1><p>TVSN 安裝筆記<br>補充說明照著<a href="https://github.com/silverbottlep/tvsn">TVSN GitHub</a>安裝及測試中碰到的一些問題</p>
+<span id="more"></span>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><h3 id="TVSN"><a href="#TVSN" class="headerlink" title="TVSN"></a>TVSN</h3><p><a href="https://github.com/silverbottlep/tvsn">TVSN GitHub</a><br>Transformation-Grounded Image Generation Network for Novel 3D View Synthesis<br><a href="http://www.cs.unc.edu/~eunbyung/">Eunbyung Park</a>, <a href="https://eng.ucmerced.edu/people/jyang44/">Jimei Yang</a>, <a href="http://www.meyumer.com/">Ersin Yumer</a>, <a href="http://www.duygu-ceylan.com/">Duygu Ceylan</a>, <a href="http://acberg.com/">Alexander C. Berg</a>, CVPR 2017<br><a href="http://www.cs.unc.edu/~eunbyung/tvsn/">[Paper]</a> <a href="http://www.cs.unc.edu/~eunbyung/tvsn/">[Project Homepage]</a></p>
+<h3 id="CUDA-8-0-amp-OpenCV-3-0-0"><a href="#CUDA-8-0-amp-OpenCV-3-0-0" class="headerlink" title="CUDA 8.0 &amp; OpenCV 3.0.0"></a>CUDA 8.0 &amp; OpenCV 3.0.0</h3><p><a href="http://www.pyimagesearch.com/2016/07/11/compiling-opencv-with-cuda-support/">Compiling OpenCV with CUDA support</a><br><a href="https://hackmd.io/s/ByEYdX0al">在你的ubuntu機器上安裝openCV</a><br><a href="https://hackmd.io/s/rk_WrHvRe">Caffe Install Note</a></p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>Linux Mint 18.1 Serena (Ubuntu 16.04)<br>GPU - Nvidia GTX 1080 8GB<br>CUDA 8.0<br>OpenCV 3.0.0<br>gcc 5.4.0</p>
+<h2 id="Torch"><a href="#Torch" class="headerlink" title="Torch"></a>Torch</h2><p><a href="http://torch.ch/docs/getting-started.html#_">Getting started with Torch</a><br>安裝完後</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install torch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install cutorch</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install nn</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install paths</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="STN-BHWD"><a href="#STN-BHWD" class="headerlink" title="STN BHWD"></a>STN BHWD</h2><p><a href="https://github.com/qassemoquab/stnbhwd">stnbhwd</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">luarocks install https://raw.githubusercontent.com/qassemoquab/stnbhwd/master/stnbhwd-scm-1.rockspec</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id="TVSN-1"><a href="#TVSN-1" class="headerlink" title="TVSN"></a>TVSN</h2><p><code>git clone</code>至自訂位置<code>$(tvsn_root)</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/silverbottlep/tvsn.git</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ShapeNet"><a href="#ShapeNet" class="headerlink" title="ShapeNet"></a>ShapeNet</h2><p><a href="https://shapenet.org/">shapenet.org</a><br>申請帳號並通過管理員認證後，下載<code>ShapeNetCore.v1</code><br>將其解壓縮(類別也要解壓縮)至自訂位置<code>$(SHAPENET_DATA)</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ ./make_new_chair.sh $(SHAPENET_DATA)</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ <span class="built_in">ln</span> -s $(SHAPENET_DATA)/02958343 ./car</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/data $ <span class="built_in">ln</span> -s $(SHAPENET_DATA)/new_chair ./chair</span></span><br></pre></td></tr></table></figure>
+<h2 id="相關套件"><a href="#相關套件" class="headerlink" title="相關套件"></a>相關套件</h2><p>:::info<br>盡量去各官網下載，以免用<code>apt-get</code>裝到不完全、別的東西<br>:::</p>
+<h3 id="1-GL"><a href="#1-GL" class="headerlink" title="1. GL"></a>1. GL</h3><p>我是在之前裝CUDA的時候順便裝好的<br>可參考<a href="https://hackmd.io/s/rk_WrHvRe">Caffe Install Note</a></p>
+<h3 id="2-GLEW"><a href="#2-GLEW" class="headerlink" title="2. GLEW"></a>2. GLEW</h3><p><a href="http://glew.sourceforge.net/">GLEW</a> &#x2F; vesion 2.1.0<br>下載後解壓縮，再依照README install</p>
+<p>由於他是安裝在<code>~/usr/lib64</code>，故要做連結</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -s /usr/lib64/libGLEW.so.2.1 /usr/lib/libGLEW.so.2.1</span> </span><br></pre></td></tr></table></figure>
+
+<h3 id="3-GLM"><a href="#3-GLM" class="headerlink" title="3. GLM"></a>3. GLM</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">apt-get install libglm-dev</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-FreeImage-FreeImagePlus"><a href="#4-FreeImage-FreeImagePlus" class="headerlink" title="4. FreeImage, FreeImagePlus"></a>4. FreeImage, FreeImagePlus</h3><p><a href="http://freeimage.sourceforge.net/download.html">FreeImage</a> &#x2F; version 3.17.0<br>下載後解壓縮，再依照README install</p>
+<p>會看到類似<code>error: invalid character &#39; &#39; in raw string delimiter</code>的error<br>參考<a href="http://blog.csdn.net/woainishifu/article/details/71451119">Linux(ubuntu系統)下使用FreeImage庫 - CSDN博客</a><br>在<code>$(FreeImage_root)/Source/LibWebP/src/dsp</code>的<br><code>dsp.upsampling_mips_dsp_r2.c</code>和<code>dsp.yuv_mips_dsp_r2.c</code><br>因為C++11將R作為raw string，而上述檔案中將R作為macro使用<br>故找到對應位置把RGB的R改成Red即可</p>
+<h3 id="5-MATLAB"><a href="#5-MATLAB" class="headerlink" title="5. MATLAB"></a>5. MATLAB</h3><p>安裝2017b版本<br>進入<code>~/.bashrc</code>在最下面<code>PATH</code>後面加上<code>:$(MATLAB_root)/R2017b/bin</code><br>類似於</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:$(MATLAB_root)/R2017b/bin</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-OpenEXR"><a href="#6-OpenEXR" class="headerlink" title="6. OpenEXR"></a>6. OpenEXR</h3><p>參考<a href="http://www.linuxidc.com/Linux/2012-08/68050.htm">Ubuntu下編譯安裝OpenEXR - Linux公社</a><br>到<a href="http://www.openexr.com/downloads.html">OpenEXR</a>下載<code>OpenEXR-2.2.1</code>及<code>IlmBase-2.2.1</code><br>到<a href="http://zlib.net/">zlib</a>下載<code>zlib-1.2.11</code><br>並解壓縮到指定位置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo tar -zxvf ilmbase-2.2.1.tar.gz -C /usr/local/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo tar -zxvf openexr-2.2.1.tar.gz -C /usr/local/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo tar -zxvf zlib-1.2.11.tar.gz -C /usr/local/</span></span><br></pre></td></tr></table></figure>
+<p>在各自目錄下進行安裝<br>記得OpenEXR要最後裝</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo ./configure</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo make install</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ObjRenderer"><a href="#ObjRenderer" class="headerlink" title="ObjRenderer"></a>ObjRenderer</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root) $ git <span class="built_in">clone</span> https://github.com/silverbottlep/ObjRenderer.git</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root) $ <span class="built_in">cd</span> ObjRenderer</span></span><br></pre></td></tr></table></figure>
+<p>在<code>$(tvsn_root)/ObjRenderer/ImageUtils.h</code>中約第78行<br>因為<code>cv::vector</code>在OpenCV 3.0.0之後廢除了，要改成<code>std::vector</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">cv::<span class="built_in">vector</span>&lt;uchar&gt; lut;</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;uchar&gt; lut;</span><br></pre></td></tr></table></figure>
+<h3 id="shader修改"><a href="#shader修改" class="headerlink" title="shader修改"></a>shader修改</h3><p>作者的ObjRenderer是從<a href="https://github.com/sunweilun/ObjRenderer">sunweilun</a>的版本修改而來<br>但檢查一下code，發現有幾處缺失，會造成normal無法順利render<br>將<code>$(tvsn_root)/ObjRenderer/ObjRenderer.cpp</code>中約第90行補上</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">fragList.<span class="built_in">push_back</span>(<span class="string">&quot;Shader/norm.frag&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>以及<code>$(tvsn_root)/ObjRenderer/Shader/main.frag</code>修改成</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#version 330</span></span><br><span class="line"></span><br><span class="line">uniform uint outputID;</span><br><span class="line"></span><br><span class="line">out vec4 color;</span><br><span class="line"></span><br><span class="line">vec4 <span class="title function_">shadePhong</span><span class="params">()</span>;</span><br><span class="line">vec4 <span class="title function_">shadeCoord</span><span class="params">()</span>;</span><br><span class="line">vec4 <span class="title function_">shadeBRDF</span><span class="params">()</span>;</span><br><span class="line">vec4 <span class="title function_">shadeNorm</span><span class="params">()</span>;     <span class="comment">//new</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span>(outputID)</span><br><span class="line">    &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1u</span>:</span><br><span class="line">        color = shadeCoord();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">2u</span>:</span><br><span class="line">		color = shadePhong();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3u</span>:</span><br><span class="line">		color = shadeBRDF();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">4u</span>:    <span class="comment">//new</span></span><br><span class="line">		color = shadeNorm();</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著依照不同category，修改<code>config.txt</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/ObjRenderer $ <span class="built_in">cat</span> config.txt</span></span><br><span class="line">folder_path = $(SHAPENET_DATA)/02958343/ &quot;e.g. &#x27;car&#x27; category&quot;</span><br><span class="line">envmap_path = envmaps/envmap2.hdr</span><br><span class="line">theta_inc = 20</span><br><span class="line">phi_inc = 10</span><br><span class="line">phi_max = 20</span><br><span class="line">output_coord = 1</span><br><span class="line">output_norm = 1</span><br><span class="line">render_size = 1024</span><br><span class="line">output_size = 256</span><br><span class="line">reverse_normals = 1</span><br><span class="line">brightness = 0.7</span><br></pre></td></tr></table></figure>
+<p>(<strong>注意<code>folder_path</code>最後要有<code>/</code></strong>)</p>
+<p>然後make</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/ObjRenderer $ make</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/ObjRenderer $ ./dist/Release/GNU-Linux-x86/objrenderer</span></span><br></pre></td></tr></table></figure>
+
+<p>如果看到類似<br><code>X Error of failed request:  BadValue (integer parameter out of range for operation)</code>的error<br>可以試著重新安裝一些套件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get install --reinstall xserver-xorg-video-intel libgl1-mesa-glx libgl1-mesa-dri xserver-xorg-core</span>  </span><br></pre></td></tr></table></figure>
+<p>以及重開</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">reboot</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="MatlabEXR"><a href="#MatlabEXR" class="headerlink" title="MatlabEXR"></a>MatlabEXR</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root) $ <span class="built_in">cd</span> gen_vis_maps</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ wget http://www.mit.edu/~kimo/software/matlabexr/MatlabEXR.zip</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ unzip MatlabEXR.zip</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ <span class="built_in">cd</span> MatlabEXR</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps/MatlabEXR $ mex exrinfo.cpp -lIlmImf -lIex -lImath -lHalf -I/usr/local/include/OpenEXR/ -L/usr/local/lib</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps/MatlabEXR $ mex exrread.cpp -lIlmImf -lIex -lImath -lHalf -I/usr/local/include/OpenEXR/ -L/usr/local/lib</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps/MatlabEXR $ mex exrwrite.cpp -lIlmImf -lIex -lImath -lHalf -I/usr/local/include/OpenEXR/ -L/usr/local/lib</span></span><br></pre></td></tr></table></figure>
+<p>(注意OpenEXR位置可能不同 ex: <code>/usr/include/OpenEXR/</code>)</p>
+<p>還會碰到一些warning及error</p>
+<h3 id="gcc版本問題"><a href="#gcc版本問題" class="headerlink" title="gcc版本問題"></a>gcc版本問題</h3><p>會跳出warning，說只支援gcc 4.9.x以下，可以無視</p>
+<h3 id="exrread-cpp"><a href="#exrread-cpp" class="headerlink" title="exrread.cpp"></a>exrread.cpp</h3><p>跳出類似<code>error: cannot convert ‘int*’ to ‘const size_t*&#39;</code>的error<br>參考<a href="https://stackoverflow.com/questions/43045701/switch-compiler-on-matlab-2017a-in-ubuntu-os">Switch compiler on Matlab 2017a in Ubuntu OS - Stack Overflow</a><br>到<code>$(tvsn_root)/gen_vis_maps/MatlabEXR/exrread.cpp</code>約第103行</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> dims[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">mwSize dims[<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<h2 id="Generate-Visibility-Map"><a href="#Generate-Visibility-Map" class="headerlink" title="Generate Visibility Map"></a>Generate Visibility Map</h2><p>因為在<code>gen_vis_maps.sh</code>最後會用到<code>fb.mattorch</code>的東西 (用來做將數個.mat存成.t7)<br>本來是要裝<code>fblualib</code>，但因為相關套件版本很亂，安裝很多問題，一直失敗<br>故放棄使用<code>fb.mattorch</code>，改用<a href="https://github.com/clementfarabet/lua---mattorch">mattorch</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">MATLAB_ROOT=$(MATLAB_root)/R2017b/ luarocks install https://raw.githubusercontent.com/clementfarabet/lua---mattorch/master/mattorch-1.0-0.rockspec</span></span><br></pre></td></tr></table></figure>
+<p>之後進<code>gen_vis_maps.lua</code><br>將</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">mattorch = <span class="built_in">require</span>(<span class="string">&#x27;fb.mattorch&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">mattorch = <span class="built_in">require</span>(<span class="string">&#x27;mattorch&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>另外，就這樣跑的話會出現tensor的<code>copy()</code>中src(18x18)和out(64x64)大小不符的error<br>可能是<code>fb.mattorch</code>與<code>mattorch</code>的差異？(沒用<code>fb.mattorch</code>跑成功過，所以不知道)<br>原本在<code>gen_vis_maps.m</code>中的out_maps為64x64x18x18<br>但在<code>gen_vis_maps.lua</code>經由<code>mattorch.load()</code>讀進來的out_maps為18x18x64x64<br>猜測應該是順序相反，故將<code>gen_vis_maps.lua</code>中</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">m = mat.out_map[&#123;&#123;&#125;,&#123;&#125;,&#123;in_theta&#125;,&#123;trans&#125;&#125;]:squeeze()</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">m = mat.out_map[&#123;&#123;trans&#125;,&#123;in_theta&#125;,&#123;&#125;,&#123;&#125;&#125;]:transpose(<span class="number">3</span>, <span class="number">4</span>):squeeze()</span><br></pre></td></tr></table></figure>
+
+<p>上面處理完就可以進行下一步<br>(以category car為例)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/gen_vis_maps $ ./gen_vis_maps.sh $(SHAPENET_DATA)/02958343 car</span></span><br></pre></td></tr></table></figure>
+<p>碰到類似<code>Missing symbol &#39;_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4findEcm&#39;</code><br>參考<a href="https://github.com/BVLC/caffe/issues/5447">Error in make mattest - Issue #5447 - BVLC&#x2F;Caffe</a><br>進<code>~/.bashrc</code>最後加上</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">export</span> LD_PRELOAD=<span class="variable">$LD_PRELOAD</span>:/usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libprotobuf.so.9</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Metadata"><a href="#Metadata" class="headerlink" title="Metadata"></a>Metadata</h2><p>在training前，要建立metadata的cache<br>內容主要是記錄training set和testing set的數量<br>(以category car為例)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code $ th make_metadata.lua --category car</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Training-DOAFN"><a href="#Training-DOAFN" class="headerlink" title="Training DOAFN"></a>Training DOAFN</h2><p>training</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code $ ./script_train_doafn.sh</span></span><br></pre></td></tr></table></figure>
+<p>預設category為car，可進<code>script_train_doafn.sh</code>修改</p>
+<h2 id="Training-TVSN"><a href="#Training-TVSN" class="headerlink" title="Training TVSN"></a>Training TVSN</h2><p>下載pretrained vgg16 model</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code/lossnet $ ./download_lossnet.sh</span></span><br></pre></td></tr></table></figure>
+<p>在train之前還要修改一些東西，不然等等會出錯</p>
+<h3 id="out-of-memory"><a href="#out-of-memory" class="headerlink" title="out of memory"></a>out of memory</h3><p>記得把<code>--batchSize</code>改成<code>10</code>，預設的<code>15</code>用GTX1080(8GB RAM)跑會out of memory</p>
+<h3 id="compare-number-with-nil"><a href="#compare-number-with-nil" class="headerlink" title="compare number with nil"></a>compare number with nil</h3><p><code>script_train_tvsn.sh</code>總共會執行三次<code>train_tvsn.lua</code><br><code>epoch=1~100</code>、<code>epoch=101~200</code>、<code>epoch=201~220</code>分別用三組不同的參數進行training<br>若什麼都沒修改的話，在執行第二次training(<code>epoch=101~200</code>)就會開始噴error<br><code>train_tvsn.lua:141: attempt to compare number with nil</code><br>這是因為<code>train_tvsn.lua</code>第141行的</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> opt.resetD &gt; <span class="number">0</span> <span class="keyword">then</span></span><br></pre></td></tr></table></figure>
+<p><code>opt.resetD</code>為<code>nil</code>，無法與<code>0</code>做比較<br>由於第二、三次training是接續第一次training的，應該會希望Discriminator的error值延續，不必reset<br>故將<code>opt.resetD</code>的初始值設為<code>0</code><br>在<code>train_tvsn.lua</code>開頭處的<code>opt</code>設定中，約第39行加入</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">--resetD            (default 0)</span></span><br></pre></td></tr></table></figure>
+
+<p>上面都修改完就可以進行training</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code $ ./script_train_tvsn.sh</span></span><br></pre></td></tr></table></figure>
+<p>預設category為car，可進<code>script_train_tvsn.sh</code>修改</p>
+<h2 id="Testing-TVSN"><a href="#Testing-TVSN" class="headerlink" title="Testing TVSN"></a>Testing TVSN</h2><p>(以category car為例)<br>在<code>$(tvsn_root)/tvsn/code/test_tvsn.lua</code>中約第41行</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">opt.doafn_path = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">&#x27;DOAFN_SYM_%s_%s_bs025/net-epoch-200.t7&#x27;</span>,opt.imgscale,opt.category)</span><br></pre></td></tr></table></figure>
+<p>要註解掉，doafn_path參數由外面送進去</p>
+<p><em><strong>注意</strong></em><br>在一開始<code>opt</code>設定中，約第29行加入</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">--batchSize         (default 15)</span></span><br></pre></td></tr></table></figure>
+<p>並往下找，找到</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> n_batch = <span class="number">15</span></span><br></pre></td></tr></table></figure>
+<p>將其改成</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> n_batch = opt.batchSize</span><br></pre></td></tr></table></figure>
+<p>以及</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>,n_samples,<span class="number">15</span> <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">collectgarbage</span>()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;processing &#x27;</span> .. i)</span><br><span class="line">    <span class="keyword">for</span> j=<span class="number">1</span>,<span class="number">15</span> <span class="keyword">do</span></span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>,n_samples,n_batch <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">collectgarbage</span>()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;processing &#x27;</span> .. i)</span><br><span class="line">    <span class="keyword">for</span> j=<span class="number">1</span>,n_batch <span class="keyword">do</span></span><br></pre></td></tr></table></figure>
+<p><em><strong>一定要這麼做，不然當training時使用的batchSize改變(非原本的15)，testing會直接爆炸</strong></em></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">(tvsn_root)/tvsn/code/ $ th test_tvsn.lua --category car --doafn_path ../snapshots/pretrained/doafn_car_epoch200.t7 --tvsn_path ../snapshots/pretrained/tvsn_car_epoch220.t7 --batchSize 10 --plot 1</span></span><br></pre></td></tr></table></figure>
+<p>(<em><strong>記得補上training時的batchSize</strong></em>，作者的pretrained model是用15，這裡因為GTX1080 memory不夠，所以用10，加上<code>--batchSize 10</code>)<br>(記得要加上<code>--plot 1</code>，否則不會畫出結果)</p>
+<p>結果圖存在<code>$(tvsn_root)/tvsn/code/result_car</code></p>
+<p>下圖是用作者的pretrained model跑出來的結果圖1 (可以看出batchSize&#x3D;15)<br>column 1~6 分別是 input &#x2F; target(ground truth) &#x2F; AFN &#x2F; visibility map &#x2F; DOAFN &#x2F; TVSN<br><img src="https://i.imgur.com/Pq6uB3l.jpg" alt="test001.jpg"></p>
+<h2 id="補：fblualib-未裝成功"><a href="#補：fblualib-未裝成功" class="headerlink" title="補：fblualib (未裝成功)"></a>補：fblualib (未裝成功)</h2><p>參考<a href="https://github.com/facebookarchive/fblualib">fblualib</a><br>及其中的<a href="https://github.com/facebookarchive/fblualib/blob/master/INSTALL.md">INSTALL.md</a><br>可惜他的<code>install_all.sh</code>中的這段</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 13\.10 ]]; <span class="keyword">then</span></span><br><span class="line">    :</span><br><span class="line"><span class="keyword">elif</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 14 ]]; <span class="keyword">then</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line"><span class="keyword">elif</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 15\.04 ]]; <span class="keyword">then</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line"><span class="keyword">elif</span> [[ <span class="variable">$issue</span> =~ ^Ubuntu\ 16\.04 ]]; <span class="keyword">then</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line">    current=1</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Ubuntu 13.10, 14.*, 15.04 or 16.04 required&quot;</span> &gt;&amp;2</span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>由於使用的系統是<code>Linux Mint 18.1 Serena</code>，理論上要被當成<code>Ubuntu 16.04</code><br>但仍然過不了<br>故直接下載<code>install_all.sh</code>，並修改成</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ubuntu 16.04</span></span><br><span class="line">    extra_packages=libiberty-dev</span><br><span class="line">    current=1</span><br></pre></td></tr></table></figure>
+<p>接著執行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo bash ./install_all.sh</span></span><br></pre></td></tr></table></figure>
+<p>應該到<code>Building fbthrift</code>的時候就會噴error<br>因為<code>fbthrift</code>最新版的安裝方式，從automake改成用cmake (然而fblualib的github卻沒有更新…)<br>這裡開始就很麻煩<br>為了裝<code>fbthrift</code>，首先要裝其套件，剛剛裝下來還缺幾個</p>
+<h3 id="Mstch"><a href="#Mstch" class="headerlink" title="Mstch"></a>Mstch</h3><p><a href="https://github.com/no1msd/mstch">Mstch</a><br>git clone下來後照著裝即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<h3 id="Zstd"><a href="#Zstd" class="headerlink" title="Zstd"></a>Zstd</h3><p><a href="https://github.com/facebook/zstd">Zstd</a><br>一樣git clone下來後照著裝即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span> </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<h3 id="fbthrift"><a href="#fbthrift" class="headerlink" title="fbthrift"></a>fbthrift</h3><p><a href="https://github.com/facebook/fbthrift">fbthrift</a><br>最麻煩的來了<br>首先一樣照著跑</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/facebook/fbthrift</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make -j 8</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<p>理論上不會出錯，乍看之下很順利，但等等裝<code>thpp</code>就會炸了<br>到時候裝<code>thpp</code>會噴<code>no module named thrift_compiler</code>的error<br>參考<a href="https://github.com/facebook/thpp/issues/2">build error ‘no module named thrift_compiler’ - Issue #2 - facebook&#x2F;thpp</a><br>及<a href="https://github.com/facebook/fbthrift/issues/26#issuecomment-55318058">build failure ‘cannot import name frontend’ - Issue #26 - facebook&#x2F;fbthrift</a><br>還有<a href="https://github.com/facebook/fbthrift/issues/249">cannot import name frontend - Issue #249 - facebook&#x2F;fbthrift</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo python setup.py install</span></span><br></pre></td></tr></table></figure>
+<p>這樣理論上在裝<code>thpp</code>時就不會有<code>no module named thrift_compiler</code>的error<br>…<br>..而是噴另一個error: <code>cannot import name frontend</code> (唉)<br>處理方法是</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">g++ -I /usr/include/python2.7 -I $(fbthrift_root) -std=c++14 -fpic -shared -o frontend.so compiler.cc -lboost_python -lpython2.7 -L/build/lib -lcompiler_base -lcompiler_ast -lboost_system -lboost_filesystem -lssl -lcrypto</span></span><br></pre></td></tr></table></figure>
+<p>…然後就會有另一個error: <code>relocation R_X86_64_32 against</code><br>打開<code>$(fbthrift_root)</code>的<code>CMakelists.txt</code><br>在</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">set(CMAKE_CXX_STANDARD 14) #Requires CMake 3.1.3</span><br></pre></td></tr></table></figure>
+<p>下面加上</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">set(CMAKE_CXX_FLAGS &quot;-fPIC&quot;)</span><br><span class="line">set(CMAKE_C_FLAGS &quot;-fPIC&quot;)</span><br></pre></td></tr></table></figure>
+<p>然後重跑一次整個流程</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbthrift_root)/build</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">cmake ..</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make -j 8</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make install</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">g++ -I /usr/include/python2.7 -I $(fbthrift_root) -std=c++14 -fpic -shared -o frontend.so compiler.cc -lboost_python -lpython2.7 -L/build/lib -lcompiler_base -lcompiler_ast -lboost_system -lboost_filesystem -lssl -lcrypto</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> $(fbrift_root)/thrift/compiler/py</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo python setup.py install</span></span><br></pre></td></tr></table></figure>
+<p>理論上就OK了</p>
+<h3 id="thpp"><a href="#thpp" class="headerlink" title="thpp"></a>thpp</h3><p><a href="https://github.com/facebook/thpp">thpp</a><br>照著<a href="https://github.com/facebook/thpp/blob/master/INSTALL.md">INSTALL.md</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/facebook/thpp.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> thpp</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./build.sh</span></span><br></pre></td></tr></table></figure>
+<p>本來應該出現的error: <code>no module named thrift_compiler</code>，<code>cannot import name frontend</code><br>因為上面的處理而解決了<br>…<br>然後就會又另一個error (…)<br><code>folly/io/IOBufQueue.h:43:20: error: ‘updateGuard’ function uses ‘auto’ type specifier without trailing return type</code><br>很多類似於這種的，看起來是C++語法錯誤，但還沒研究，先暫時放著</p>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>TVSN</category>
+      </categories>
+      <tags>
+        <tag>安裝筆記</tag>
+        <tag>CGLab</tag>
+        <tag>Deep Learning</tag>
+        <tag>TVSN</tag>
+        <tag>GAN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Writing LaTeX in VSCode</title>
+    <url>/2018/05/22/180522_writing-latex-in-vscode/</url>
+    <content><![CDATA[<h1 id="Writing-LaTeX-in-VSCode"><a href="#Writing-LaTeX-in-VSCode" class="headerlink" title="Writing LaTeX in VSCode"></a>Writing LaTeX in VSCode</h1><p>在VSCode上寫LaTeX的安裝記錄，OS以Linux為主、Windows也有裝成功<br>注意VSCode與LaTeX Workshop版本</p>
+<span id="more"></span>
+
+<h2 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h2><p><a href="https://github.com/shaform/ntu-thesis/wiki">臺灣大學碩博士論文 XeLaTeX 模版</a><br><a href="https://zhuanlan.zhihu.com/p/31883018">配置VSCode为LaTeX集成开发环境(IDE) - 初级版</a><br><a href="http://www.latexstudio.net/archives/12260">LaTeX技巧932：如何配置Visual Studio Code作为LaTeX编辑器[新版更新]</a><br><a href="https://eggycat.github.io/2018/02/13/LaTeX-on-vscode/">Windows 平台下在 Visual Studio Code 上使用 LaTeX</a></p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>Linux Mint 18.1 Serena (Ubuntu 16.04)<br>Visual Studio Code 1.23.1</p>
+<p>Windows 10<br>Visual Studio Code 1.23.1</p>
+<h2 id="TeX-Live"><a href="#TeX-Live" class="headerlink" title="TeX Live"></a>TeX Live</h2><p>主要包含一些LaTeX編譯器</p>
+<ul>
+<li><h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install texlive texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-bibtex-extra texlive-science texlive-humanities</span><br></pre></td></tr></table></figure></li>
+<li><h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3>從<a href="http://ftp.yzu.edu.tw/CTAN/systems/texlive/Images/">元智的鏡像站</a>下載 <strong>TeX Live 2018</strong> (<code>texlive2018.iso</code> 約3.2GB)<br>之後掛載或解壓縮，執行<code>install-tl-windows.bat</code><br>安裝過程會問你要裝哪些，可以把前端工具取消不選</li>
+</ul>
+<p>裝完後可以跳去 <strong>LaTeX Workshop</strong> 步驟</p>
+<h2 id="安裝字型"><a href="#安裝字型" class="headerlink" title="安裝字型"></a>安裝字型</h2><p>取自<a href="https://github.com/shaform/ntu-thesis/wiki">臺灣大學碩博士論文 XeLaTeX 模版</a><br>重點就是要有這5個字型檔</p>
+<ul>
+<li>kaiu.ttf</li>
+<li>timesbd.ttf</li>
+<li>timesbi.ttf</li>
+<li>timesi.ttf</li>
+<li>times.ttf<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4.1. 建立資料夾</span></span><br><span class="line">sudo mkdir -p /usr/share/fonts/truetype/win/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4.2. 從 Windows 複製字體</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">請將 Windows 字型資料夾的 kaiu.ttf 及 <span class="built_in">times</span> 開頭的檔案放置在 [WINDOWS]/Windows/Fonts/ 資料夾</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者是直接掛載 Windows 字型資料夾所在的磁區</span></span><br><span class="line">sudo cp [WINDOWS]/Windows/Fonts/kaiu.ttf /usr/share/fonts/truetype/win/</span><br><span class="line">sudo cp [WINDOWS]/Windows/Fonts/times*.ttf /usr/share/fonts/truetype/win/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4.3. 更新字體</span></span><br><span class="line">fc-cache</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4.4. 檢查是否成功，應該要看到標楷體和 Times New Roman</span></span><br><span class="line">fc-list | grep &quot;times\|kaiu&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="fonts-lmodern"><a href="#fonts-lmodern" class="headerlink" title="fonts-lmodern"></a>fonts-lmodern</h2><p>理論上按照<a href="https://github.com/shaform/ntu-thesis/wiki">臺灣大學碩博士論文 XeLaTeX 模版</a>所說<br>流程至此應該就可以<code>make</code>成功<br>但我還是碰到了字型的error，解法如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install fonts-lmodern</span><br></pre></td></tr></table></figure>
+
+<h2 id="LaTeX-Workshop"><a href="#LaTeX-Workshop" class="headerlink" title="LaTeX Workshop"></a>LaTeX Workshop</h2><p>直接在VSCode擴充功能上安裝 <strong>LaTeX Workshop</strong> 插件<br>我安裝的時候版本是5.4.0<br>接著 <strong>開啟資料夾-&gt;(選擇論文資料夾)</strong><br>再從 <strong>設定-&gt;工作區設定</strong><br>加入</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="attr">&quot;latex-workshop.view.pdf.viewer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tab&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;latex-workshop.latex.recipes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xelatex -&gt; bibtex -&gt; xelatex*2&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;tools&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="string">&quot;xelatex&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;bibtex&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;xelatex&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;latex-workshop.latex.tools&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bibtex&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bibtex&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="string">&quot;%DOCFILE%&quot;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xelatex&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xelatex&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="string">&quot;-synctex=1&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;-interaction=nonstopmode&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;-file-line-error&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;-shell-escape&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="string">&quot;%DOC%&quot;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+<p>包含了設定在新分頁檢視pdf檔，選擇<code>XeLaTeX</code>作為編譯器，及設定編譯流程</p>
+<p>這樣裝完之後<br>每次修改tex檔並儲存時，就會自動編譯並刷新已開啟的pdf檔<br>(點右上角<code>View LaTeX PDF file (Ctrl+Alt+V)</code>可以檢視pdf檔)</p>
+<ul>
+<li><h3 id="Windows-1"><a href="#Windows-1" class="headerlink" title="Windows"></a>Windows</h3>一些注意事項</li>
+</ul>
+<ol>
+<li>論文資料夾路徑不得為中文</li>
+<li>如果有碰到類似<code>Error: Command \counterwithout already defined</code><br>參考<a href="https://tex.stackexchange.com/questions/425600/latex-error-command-counterwithout-already-defined">StackExchange</a><br>需在<code>thesis.tex</code>最前面加上這兩行<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">\let\counterwithout\relax</span><br><span class="line">\let\counterwithin\relax</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>如果想進行pdf文件處理<br>可以參考<a href="https://github.com/shaform/ntu-thesis/wiki">臺灣大學碩博士論文 XeLaTeX 模版</a>的其他部份</p>
+]]></content>
+      <categories>
+        <category>VSCode</category>
+        <category>LaTeX</category>
+      </categories>
+      <tags>
+        <tag>安裝筆記</tag>
+        <tag>CGLab</tag>
+        <tag>VSCode</tag>
+        <tag>LaTeX</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Android Runtime</title>
+    <url>/2022/06/21/220621_android-runtime/</url>
+    <content><![CDATA[<h1 id="隨筆-Android-Runtime"><a href="#隨筆-Android-Runtime" class="headerlink" title="(隨筆) Android Runtime"></a>(隨筆) Android Runtime</h1><p>在看 Kotlin Coroutine &amp; Dispatcher 相關文章的時候順便查的<br>粗略記錄一下<br>大部分都是出自 <a href="https://www.jianshu.com/p/047d5b00ff7a">Android 知识：JVM、DVM、ART的区别</a></p>
+<span id="more"></span>
+
+<blockquote>
+<p>References:</p>
+<ul>
+<li><a href="https://www.jianshu.com/p/047d5b00ff7a">Android 知识：JVM、DVM、ART的区别</a></li>
+<li><a href="https://www.quora.com/What-are-registers-and-what-is-stack">What are registers, and what is stack?</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1438817">让 Android Q 强制重启的 Project Mainline，到底是什么？</a></li>
+<li><a href="https://luolanmeet.github.io/jvm-note/content/part3/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%89%A7%E8%A1%8C%E5%AD%90%E7%B3%BB%E7%BB%9F/%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/%E5%B8%B8%E9%87%8F%E6%B1%A0.html">常量池</a></li>
+</ul>
+</blockquote>
+<h3 id="JVM-架構"><a href="#JVM-架構" class="headerlink" title="JVM 架構"></a>JVM 架構</h3><p><img src="https://i.imgur.com/OyruBcr.png"></p>
+<ul>
+<li>Loading (加載)：查找並加載 <code>.class</code></li>
+<li>Linking (鏈結)：包括驗證、準備、解析<ul>
+<li>驗證：確保被導入 Class 的正確性</li>
+<li>準備：為 Class 的 static field 分配，並用預設值 initialize</li>
+<li>解析：JVM 將 Constant Pool 的 Symbolic References 翻譯到具體的 memory address</li>
+</ul>
+</li>
+<li>Initializing (初始化)：將 Class variable 初始化成正確的值</li>
+</ul>
+<h3 id="ART-vs-DVM-vs-JVM"><a href="#ART-vs-DVM-vs-JVM" class="headerlink" title="ART vs. DVM vs. JVM"></a>ART vs. DVM vs. JVM</h3><ul>
+<li>目前主流是 ART (Android Runtime)<ul>
+<li>跟 DVM 差別，在 DVM 每次執行時，都要透過 JIT (Just in Time Compiler) 將 Bytecode 轉成 Machine code</li>
+<li>而 ART 在系統安裝程式時會進行一次 AOT (Ahead of Time Compilation) 將 Bytecode 預先編譯成 Machine code 存在 local</li>
+<li>這會造成兩個問題：安裝過久、儲存空間過大</li>
+<li>所以 Android 7.0 的 ART 還是引入了 JIT，只將多次執行的區段 (Hot Spot) 從 Bytecode 轉成 Machine code，其餘留在執行時其才用 JIT 編譯</li>
+</ul>
+</li>
+<li>DVM (Dalvik Virtual Machine)<ul>
+<li>已經被 ART 取代</li>
+<li>DVM 會用 dx 工具將所有 <code>.class</code> 打包成一個 <code>.dex</code>，DVM 再從中讀取指令和資料</li>
+<li>因為都包在一起，加載的效率比較高</li>
+<li>與 JVM 不同，DVM 是基於 Register 的，速度較快，指令更緊湊、簡潔 (省去很多 Stack IO)，不過指令會比基於 Stack 要來的大</li>
+</ul>
+</li>
+<li>JVM (Java Virtual Machine)<ul>
+<li>Java Heap，所有 Thread 共用，Instance 那些都會放這，受 GC 管理</li>
+<li>Method Area，所有 Thread 共用，放 JVM 加載的一些資訊，包含靜態變數、Method 等，可以選擇不要 GC</li>
+<li>Thread 私有的 Java Virtual Machine Stacks，生命週期與 Thread <ol>
+<li>JVM Stacks 儲存 Thread 中 Java Method 調用的狀態，包含 local variable, parameters, return value, 及運算的中間結果</li>
+<li>如果 Thread 要求的 Stack 容量超過 JVM 所允許的最大容量，會拋出 <code>StackOverflowError</code></li>
+<li>如果 JVM Stacks 可以擴展、但無法拿到足夠的 memory，或者在建新的 Thread 沒有足夠的 memory 建立對應的 JVM Stacks，會拋出 <code>OutOfMemoryError</code></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="加碼，Register-vs-Stack"><a href="#加碼，Register-vs-Stack" class="headerlink" title="加碼，Register vs. Stack"></a>加碼，Register vs. Stack</h3><p>參考 <a href="https://www.quora.com/What-are-registers-and-what-is-stack">What are registers, and what is stack?</a><br>基本上就是這段</p>
+<blockquote>
+<p>When ARM uses registers it does not need to access memory cause registers are fully internal. That’s fastest and that’s reason for CPUs to have as many registers as possible. Eg early x86 (8088) has only 4 general purpose registers and 4 addressing ones. On other side ARM Cortex-M3 has 16 registers. While ARM could use internal registers 8088 is forced to use memory (stack) cause of lack of registers! And accessing memory is slow compared to registers (even when in cache).</p>
+<p>When CPU does not have enough registers it is forced to use memory (RAM) as temporary storage. A lot of CPUs have a register to ease working with such memory and such memory is called stack. Register used to work with stack is usually called Stack Pointer - SP. Above mentioned ARM Cortex-M3 uses internal register R13 as SP.</p>
+</blockquote>
+<p>Register 可以當作是 CPU 的內部儲存空間，所以存取速度可以很快<br>但不夠用的時候就會需要存取 memory，也就是 Stack</p>
+<p>許多 CPU 都有一個 Register 來簡化使用 Stack 的操作<br>而常用來存取 Stack 的 Register，就叫做 Stack Pointer (SP)</p>
+<h3 id="最後一個不太重要的，Android-Project-Mainline"><a href="#最後一個不太重要的，Android-Project-Mainline" class="headerlink" title="最後一個不太重要的，Android Project Mainline"></a>最後一個不太重要的，Android Project Mainline</h3><p>根據 <a href="https://cloud.tencent.com/developer/article/1438817">让 Android Q 强制重启的 Project Mainline，到底是什么？</a></p>
+<p>基本上就是為了解決 Android 太過碎片化，導致 end user 拿到更新版本的耗時太久<br>以前基本上 Android 發布更新是一回事，使用者實際拿到則要看手機廠商的速度</p>
+<p>所以利用模組化更新的方式，加速這整個過程<br>也算是 Android 和 iOS 相比起來的硬傷吧</p>
+]]></content>
+      <categories>
+        <category>Android</category>
+        <category>Runtime</category>
+      </categories>
+      <tags>
+        <tag>隨筆</tag>
+        <tag>Android</tag>
+        <tag>JVM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kotlin Coroutine Context and Dispatchers</title>
+    <url>/2022/06/21/220621_kotlin-coroutine-context-and-dispatchers/</url>
+    <content><![CDATA[<h1 id="Kotlin-Coroutine-Context-and-Dispatchers"><a href="#Kotlin-Coroutine-Context-and-Dispatchers" class="headerlink" title="Kotlin Coroutine Context and Dispatchers"></a>Kotlin Coroutine Context and Dispatchers</h1><p>一直沒有很懂 Coroutine 在幹麻，每每想到、爬文、看了老半天還是懵懂懵懂<br>這次終於有開竅的感覺，趁記憶還在趕緊記錄下來<br>也因此這篇文會引用大量文章 (感謝這些大神)，並濃縮其精華、加入個人主觀理解的總結</p>
+<span id="more"></span>
+
+<h1 id="在講-Dispatchers-之前，什麼是-Coroutine"><a href="#在講-Dispatchers-之前，什麼是-Coroutine" class="headerlink" title="在講 Dispatchers 之前，什麼是 Coroutine ?"></a>在講 Dispatchers 之前，什麼是 Coroutine ?</h1><blockquote>
+<p>References:</p>
+<ul>
+<li><a href="https://kotlinlang.org/docs/coroutines-basics.html">Coroutines basics</a></li>
+<li><a href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutine context and dispatchers</a></li>
+<li><a href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a></li>
+<li><a href="https://totoroliu.medium.com/program-process-thread-%E5%B7%AE%E7%95%B0-4a360c7345e5">Program&#x2F;Process&#x2F;Thread 差異</a></li>
+</ul>
+</blockquote>
+<h3 id="先來個結論"><a href="#先來個結論" class="headerlink" title="先來個結論"></a>先來個結論</h3><p>Coroutine 是一個 AP Level、輕量化的 Thread<br>而 Dispatch 到另一個 Coroutine Context 的行為，就類似於 Thread 的 Context Switch</p>
+<h3 id="原因是這樣"><a href="#原因是這樣" class="headerlink" title="原因是這樣"></a>原因是這樣</h3><p>Coroutine 在官網中的描述是這樣的</p>
+<blockquote>
+<p>Coroutines can be thought of as light-weight threads, but there is a number of important differences that make their real-life usage very different from threads.</p>
+</blockquote>
+<p>前半段點出了重點：<code>Coroutine 可以當成是輕量化的 Thread</code><br>當然，後半段有說實際上還是很多不一樣的<br>但這句其實就是 Coroutine 的懶人包</p>
+<p>而我自己會再加上一段註解：<code>Coroutine 是一個 AP Level、輕量化的 Thread</code><br>原因在於，本篇文章要講的 Dispatchers<br>其實就是 Coroutine 在程式實作了 Thread 上的 <code>Context Switch</code></p>
+<p>配合 <a href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a> 提到的</p>
+<blockquote>
+<ul>
+<li>協同式多工：程式會定時放棄已佔有的執行資源讓其它程式可以執行。由程式自己讓出執行資源，作業系統不會干涉。</li>
+<li>搶佔式多工：程式有各自的優先權，作業系統會根據程式的優先權安排當下哪個程式能擁有執行資源去執行，另外作業系統有權中斷任何正在執行中的程式，變更執行資源的擁有者。</li>
+</ul>
+</blockquote>
+<p>Coroutine 屬於前者，Thread 屬於後者<br>而 <code>協同式多工</code> 描述中的 <code>讓出執行資源</code>，其實就是 <code>Dispatch</code></p>
+<blockquote>
+<p>你看，該有的關鍵字都到齊了：Dispatch, Context</p>
+</blockquote>
+<p>再來細部一點，一樣是 <a href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a> 提到的圖<br>這是 Thread<br><img src="https://i.imgur.com/uYNmIaT.png"><br>這是 Coroutine<br><img src="https://i.imgur.com/sF03AL5.png"></p>
+<p><del>四捨五入之後基本一樣</del> 可以發現兩者在很多地方是很相似的<br>我的 Kotlin 程式中某段邏輯，可以選擇要執行在哪個 Coroutine (Context)<br>而 Context 之間的切換，就是在程式中利用 <code>Dispatchers</code> 去做 Dispatch<br>拿官網的例子來看</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">launch &#123; <span class="comment">// context of the parent, main runBlocking coroutine</span></span><br><span class="line">    println(<span class="string">&quot;main runBlocking      : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Unconfined) &#123; <span class="comment">// not confined -- will work with main thread</span></span><br><span class="line">    println(<span class="string">&quot;Unconfined            : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Default) &#123; <span class="comment">// will get dispatched to DefaultDispatcher </span></span><br><span class="line">    println(<span class="string">&quot;Default               : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(newSingleThreadContext(<span class="string">&quot;MyOwnThread&quot;</span>)) &#123; <span class="comment">// will get its own new thread</span></span><br><span class="line">    println(<span class="string">&quot;newSingleThreadContext: I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這四個 <code>println()</code> 分別跑在這幾個 Coroutine Context 上 (順序不定)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">main runBlocking      : I&#x27;m working in thread main</span><br><span class="line">Unconfined            : I&#x27;m working in thread main</span><br><span class="line">Default               : I&#x27;m working in thread DefaultDispatcher-worker-1</span><br><span class="line">newSingleThreadContext: I&#x27;m working in thread MyOwnThread</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是，如上面 Coroutine 的架構圖所示<br>Coroutine 終究只是 “AP Level”，實際執行還是要跟 OS 要資源的 (跑在 Thread 上)</p>
+<h3 id="我們來總結一下"><a href="#我們來總結一下" class="headerlink" title="我們來總結一下"></a>我們來總結一下</h3><p>從資源面來看<br>OS 會從 CPU 分出可用的 Thread 給我的程式 (其實是 Process) 運行</p>
+<p>Coroutine 是在此之上多了一層 AP Level 的切分<br>也就是</p>
+<ul>
+<li>不同的 Coroutine 可以用同一個 Thread 來執行 (Thread 可以當作 Coroutine 的容器)</li>
+<li>程式中的不同段程式碼可以跑在不同 Coroutine 上</li>
+</ul>
+<p>如同官網說的</p>
+<blockquote>
+<p>A coroutine is an instance of suspendable computation. It is conceptually similar to a thread, in the sense that it takes a block of code to run that works concurrently with the rest of the code. However, a coroutine is not bound to any particular thread. It may suspend its execution in one thread and resume in another one.</p>
+</blockquote>
+<p>而這樣做的目的如同 <a href="https://medium.com/gogolook-tech/kotlin-coroutines-%E5%85%A5%E9%96%80%E6%A6%82%E5%BF%B5-coroutine-vs-thread-e7d112b0d8ba">Kotlin Coroutines: 入門概念 Coroutine vs Thread</a> 所說</p>
+<blockquote>
+<p>Coroutine 之間的切換由當前正在執行的 Coroutine 主動讓出執行權給其它 Coroutine 執行，藉此達到並行運作，因為 Coroutine 的切換是在上層，不需要由底層的作業系統來處理，所以 Coroutine 交替時所產生的上下文切換負擔比 Thread 小。</p>
+</blockquote>
+<p>也呼應了一開始提到的官方說法：<code>Coroutine 可以當成是輕量化的 Thread</code></p>
+<h3 id="延伸閱讀：Process-vs-Thread"><a href="#延伸閱讀：Process-vs-Thread" class="headerlink" title="延伸閱讀：Process vs. Thread"></a>延伸閱讀：Process vs. Thread</h3><p>主要是在看 Coroutine 的文章時，熊熊忘記 Process vs. Thread 這種基本也經典的比較<br>這篇 <a href="https://totoroliu.medium.com/program-process-thread-%E5%B7%AE%E7%95%B0-4a360c7345e5">Program&#x2F;Process&#x2F;Thread 差異</a> 講的很清楚<br>引用文中的圖<br><img src="https://i.imgur.com/iWzo4gY.jpg"></p>
+<p>這邊就直接下結論了</p>
+<ul>
+<li>我的程式就是 Program，在執行的時候會是以 Process 存在 (也才會有 PID)</li>
+<li>而 Process 執行可以由多個 Thread 來完成</li>
+<li>這些 Thread 會共享這個 Process 的資源 (CPU, Memory, …)</li>
+</ul>
+<p>配合 Coroutine 來說就是</p>
+<ul>
+<li>Process 是 Thread 的容器</li>
+<li>Thread 又是 Coroutine 的容器</li>
+<li>而他們就是實際執行 Program 的那些環境</li>
+</ul>
+<h1 id="這篇文的重點其實是-Dispatchers"><a href="#這篇文的重點其實是-Dispatchers" class="headerlink" title="這篇文的重點其實是 Dispatchers"></a>這篇文的重點其實是 Dispatchers</h1><blockquote>
+<p>References:</p>
+<ul>
+<li><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/index.html">Dispatchers</a></li>
+<li><a href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutine context and dispatchers</a></li>
+<li><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-start/index.html">CoroutineStart</a></li>
+<li><a href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a></li>
+<li><a href="https://ithelp.ithome.com.tw/articles/10270487">day8 kotlin coroutine的 runBlocking, withContext</a></li>
+</ul>
+</blockquote>
+<p>雖然說是重點，但篇幅好像會比 Coroutine 短很多<br>主要是因為細節都在這篇 <a href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a> 中 (精彩的 trace code)</p>
+<h3 id="結論先來"><a href="#結論先來" class="headerlink" title="結論先來"></a>結論先來</h3><p>Dispatchers 有五種，扣掉自定義的有四種</p>
+<ul>
+<li><code>Dispatchers.Main</code> 沒什麼好說的，就是跑在 Main Thread 上 (看 runtime 環境而定)</li>
+<li><code>Dispatchers.Default</code> 這裡的 Default 是指 Koltin 預先定義好的基本 Thread</li>
+<li><code>Dispatchers.IO</code> 算是 Default 的變形，透過算法可以拿到超過 CPU Thread 數量的資源 (Worker)</li>
+<li><code>Dispatchers.Unconfined</code> 在哪個 Context invoke 就在哪個 Context 跑，代表在哪跑不重要</li>
+</ul>
+<p>額外補一個 CoroutineStart</p>
+<ul>
+<li><code>CoroutineStart.Default</code> 原則上在哪呼叫就跑在哪個 Thread 上，也是 <code>launch</code>, <code>async</code>, <code>runBlocking</code> 預設選擇 Thread 的方式</li>
+</ul>
+<p>也就是說，假設你寫了一個 <code>suspend function</code> 而沒有指定 Context，而後你用 <code>runBlocking</code> 測試這個 function，那麼他實際上會用 <code>Dispatchers.Main</code> 跑在 Main Thread<br>(如果測試 function 沒特別用其他 Context 包起來的話)</p>
+<h3 id="原因-…"><a href="#原因-…" class="headerlink" title="原因 …"></a>原因 …</h3><p>其實看 <a href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a> 就差不多了，非常精彩<br>而我自己理解的重點就如上面結論那樣</p>
+<h3 id="還是補充一下"><a href="#還是補充一下" class="headerlink" title="還是補充一下"></a>還是補充一下</h3><p>這邊要引用 <a href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a><br>提一下 <code>Dispatchers.IO</code> 和 <code>Dispatchers.Default</code> 的差別</p>
+<blockquote>
+<p>基本上兩者最大的差異在以創建的 Worker 數量會不同。</p>
+</blockquote>
+<p>重點在這張圖<br><img src="https://i.imgur.com/MikaG53.png"></p>
+<p><code>Default</code> 預設 non blocking task，所以會進入上面的 if，呼叫 <code>signalCpuWork()</code></p>
+<blockquote>
+<p>可以看到 <code>dispatch()</code> 預設 <code>taskContext: TaskContext = NonBlockingContext</code><br><img src="https://i.imgur.com/hc7ooRP.png"></p>
+</blockquote>
+<p>而 <code>IO</code> 則是 blocking task，所以會走下面的 else，呼叫 <code>signalBlockingWork()</code><br>透過算法讓 Worker 數量拉大</p>
+<blockquote>
+<p>開頭就跟你說 <code>blocking(...)</code><br><img src="https://i.imgur.com/4jLeG3N.png"><br>實際上點進去看，也的確能看到 <code>TASK_PROBABLY_BLOCKING</code><br><img src="https://i.imgur.com/aZFIYv9.png"></p>
+</blockquote>
+<p>最後還是從文中引用</p>
+<blockquote>
+<p>所以可以得到一個結論是， IO 與 Default 的差別在於 Default 開的 thread 會受到 CPU core 限制，而 IO 則會比 Default 多上不少。</p>
+</blockquote>
+<h3 id="再補充一些"><a href="#再補充一些" class="headerlink" title="再補充一些"></a>再補充一些</h3><p>這邊我們再回顧一下官網的例子<br>這次應該可以看得更明白了</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">launch &#123; <span class="comment">// context of the parent, main runBlocking coroutine</span></span><br><span class="line">    println(<span class="string">&quot;main runBlocking      : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Unconfined) &#123; <span class="comment">// not confined -- will work with main thread</span></span><br><span class="line">    println(<span class="string">&quot;Unconfined            : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(Dispatchers.Default) &#123; <span class="comment">// will get dispatched to DefaultDispatcher </span></span><br><span class="line">    println(<span class="string">&quot;Default               : I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">launch(newSingleThreadContext(<span class="string">&quot;MyOwnThread&quot;</span>)) &#123; <span class="comment">// will get its own new thread</span></span><br><span class="line">    println(<span class="string">&quot;newSingleThreadContext: I&#x27;m working in thread <span class="subst">$&#123;Thread.currentThread().name&#125;</span>&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這四個 <code>println()</code> 分別跑在這幾個 Coroutine Context 上 (順序不定)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">main runBlocking      : I&#x27;m working in thread main</span><br><span class="line">Unconfined            : I&#x27;m working in thread main</span><br><span class="line">Default               : I&#x27;m working in thread DefaultDispatcher-worker-1</span><br><span class="line">newSingleThreadContext: I&#x27;m working in thread MyOwnThread</span><br></pre></td></tr></table></figure>
+
+<h4 id="第一個-launch"><a href="#第一個-launch" class="headerlink" title="第一個 launch"></a>第一個 <code>launch</code></h4><ol>
+<li>沒有指定 <code>CoroutineStart</code>，同義於 <code>launch(start = CoroutineStart.Default)</code></li>
+<li>沒有指定 <code>Dispatchers</code></li>
+</ol>
+<p>根據 1.，我們知道是 “在哪呼叫就跑在哪個 Thread 上”<br>而這段程式執行時外面沒有再特別包 Context<br>配合 2.，結果就是跑在 Main Thread 上，等同於指定 <code>Dispatchers.Main</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">main runBlocking      : I&#x27;m working in thread main</span><br></pre></td></tr></table></figure>
+
+<p>以下省略 “沒有指定 <code>CoroutineStart</code>“ 的說明</p>
+<h4 id="第二個-launch-指定了-Dispatchers-Unconfined"><a href="#第二個-launch-指定了-Dispatchers-Unconfined" class="headerlink" title="第二個 launch 指定了 Dispatchers.Unconfined"></a>第二個 <code>launch</code> 指定了 <code>Dispatchers.Unconfined</code></h4><p>前面我們提到 <code>Dispatchers.Unconfined</code> 是 “在哪個 Context invoke 就在哪個 Context 跑”<br>以這段程式來說，執行時外面沒有特別包 Context，所以基本上就是 Main Thread<br>在 Main 上 invoke <code>Dispatchers.Unconfined</code> 當然還是跑在 Main 上囉</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Unconfined            : I&#x27;m working in thread main</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三個-launch-指定了-Dispatchers-Default"><a href="#第三個-launch-指定了-Dispatchers-Default" class="headerlink" title="第三個 launch 指定了 Dispatchers.Default"></a>第三個 <code>launch</code> 指定了 <code>Dispatchers.Default</code></h4><p>這邊會用到 Kotlin 預先定義好的 Thread 去跑<br>實際上則是會被 <code>DefaultDispatcher-worker</code> 撿去做，沒有 worker 的話就會放進 schedule queue</p>
+<p>worker 後面帶的數字最大等於 <code>CORE_POOL_SIZE</code>，也就是 worker 的總數</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Default               : I&#x27;m working in thread DefaultDispatcher-worker-1</span><br></pre></td></tr></table></figure>
+
+<h4 id="第四個-launch-指定了自定義的-Thread"><a href="#第四個-launch-指定了自定義的-Thread" class="headerlink" title="第四個 launch 指定了自定義的 Thread"></a>第四個 <code>launch</code> 指定了自定義的 Thread</h4><p>欸 … 怎麼不是 <code>Dispatchers.IO</code><br>這邊直接引用官網的文字</p>
+<blockquote>
+<p>newSingleThreadContext creates a thread for the coroutine to run. A dedicated thread is a very expensive resource. In a real application it must be either released, when no longer needed, using the close function, or stored in a top-level variable and reused throughout the application.</p>
+</blockquote>
+<p>摁，所以沒有特殊需求的話不太會用到自定義這招</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">newSingleThreadContext: I&#x27;m working in thread MyOwnThread</span><br></pre></td></tr></table></figure>
+
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>感謝各方大神的文章<br>這次看完終於有點通了<br>也才發現以前在 Quarkus 上用 suspend function 根本在亂寫<br>難怪 vertx 整天報 warning 說 thread 卡太久</p>
+]]></content>
+      <categories>
+        <category>Kotlin</category>
+        <category>Coroutine</category>
+      </categories>
+      <tags>
+        <tag>學習</tag>
+        <tag>Kotlin</tag>
+        <tag>Coroutine</tag>
+        <tag>Dispatcher</tag>
+      </tags>
+  </entry>
+</search>
