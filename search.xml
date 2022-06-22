@@ -517,7 +517,7 @@
 <h3 id="原因-…"><a href="#原因-…" class="headerlink" title="原因 …"></a>原因 …</h3><p>其實看 <a href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a> 就差不多了，非常精彩<br>而我自己理解的重點就如上面結論那樣</p>
 <h3 id="還是補充一下"><a href="#還是補充一下" class="headerlink" title="還是補充一下"></a>還是補充一下</h3><p>這邊要引用 <a href="https://medium.com/jastzeonic/kotlin-coroutines-dispatchers-%E9%82%A3%E4%B8%80%E5%85%A9%E4%BB%B6%E4%BA%8B-670210cb333b">Kotlin Coroutines Dispatchers 那一兩件事</a><br>提一下 <code>Dispatchers.IO</code> 和 <code>Dispatchers.Default</code> 的差別</p>
 <blockquote>
-<p>基本上兩者最大的差異在以創建的 Worker 數量會不同。</p>
+<p>基本上兩者最大的差異在於創建的 Worker 數量會不同。</p>
 </blockquote>
 <p>重點在這張圖<br><img src="https://i.imgur.com/MikaG53.png"></p>
 <p><code>Default</code> 預設 non blocking task，所以會進入上面的 if，呼叫 <code>signalCpuWork()</code></p>
